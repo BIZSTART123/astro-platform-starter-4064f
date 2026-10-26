@@ -8,7 +8,9 @@ Marketing package for **Golden Krust Newburgh** (50 Route 17K, Suite 114, Newbur
 | --- | --- |
 | `proposal.html` | Owner-ready proposal: research findings, campus offers, contribution calculator (costs entered by owner, none assumed), delivery and ordering rules, other sales programs, 30/60/90-day rollout, Instagram captions and visual concepts, outreach email drafts, college contacts with sources, and the decision checklist. Open in any browser. |
 | `flyer.html` | Printable US-Letter student flyer. Print from the browser at 100% with margins set to none. Use the button to hide the draft banner once prices are approved. |
-| `krust-on-campus-flyer-DRAFT.pdf` | PDF render of the flyer, draft banner included. |
+| `Krust-on-Campus-Flyer-DRAFT.pdf` | PDF of the flyer, draft banner included. |
+| `Krust-on-Campus-Proposal-DRAFT.pdf` | PDF of the full proposal (19 pages) for emailing or printing. |
+| `cover-note-to-Unique.md` | Draft cover email to send with the two PDFs. |
 | `golden-krust-logo.png` | Golden Krust sunburst logo, cropped (transparent PNG). |
 
 ## Before anything goes public
