@@ -39,12 +39,18 @@ still 0 $R/miss-lou-banner.jpg 5 "$V4" 60 ",drawbox=x=0:y=ih-150:w=iw:h=110:colo
 clip 1 "$V1" 4 7  "Spoken Word" "Poetry in the spirit of Miss Lou"
 clip 2 "$V3" 12 8 "Acting It Out" "Taking the story to the people"
 clip 3 "$V2" 30 7 "Solo Ministry" "Lifting voices in praise"
-clip 4 "$V4" 18 14 "The Vocal Group" "Brought the whole house to its feet"
+clip 4 "$V4" 27.13 14 "The Vocal Group" "Brought the whole house to its feet"
 clip 5 "$V5" 2 5  "Caribbean Joy" "Black, green and gold all night"
 clip 6 "$V5" 12 8 "Dancing in the Aisles" "Nobody could keep still"
 still 7 $R/proverbs-support-graphic.png 5 "$V4" 70
 still 8 $R/thank-you-graphic.png 6 "$V4" 75
 printf "file 'seg%d.mp4'\n" 0 1 2 3 4 5 6 7 8 > list.txt
-ffmpeg -v error -y -f concat -safe 0 -i list.txt -af loudnorm=I=-16:TP=-1.5:LRA=11 -c:v copy -c:a aac -b:a 160k -ar 48000 -movflags +faststart $R/caribbean-fest-2026-recap.mp4
+# Video from all segments; soundtrack = the vocal group's song (V4) from 0s.
+# Segment 4 starts at 27s of the video and uses V4 from 27s, so it stays lip-synced.
+TOTAL=$(for i in 0 1 2 3 4 5 6 7 8; do ffprobe -v error -show_entries format=duration -of csv=p=0 seg$i.mp4; done | paste -sd+ | bc)
+FO=$(echo "$TOTAL-2.5" | bc)
+ffmpeg -v error -y -f concat -safe 0 -i list.txt -i "$V4" -map 0:v -map 1:a -t $TOTAL \
+  -af "afade=t=in:st=0:d=1,afade=t=out:st=$FO:d=2.5,loudnorm=I=-16:TP=-1.5:LRA=11" \
+  -c:v copy -c:a aac -b:a 160k -ar 48000 -movflags +faststart $R/caribbean-fest-2026-recap.mp4
 ffprobe -v error -show_entries format=duration:stream=codec_name,width,height -of compact $R/caribbean-fest-2026-recap.mp4
 ls -la $R/caribbean-fest-2026-recap.mp4
