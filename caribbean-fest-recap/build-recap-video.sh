@@ -6,7 +6,7 @@ S=/tmp/claude-0/-home-user-astro-platform-starter-4064f/2b250b2a-1172-507f-8019-
 cd $S
 SERIF=/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf
 SANS=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
-V1=$(ls $U/3b903a31*); V2=$(ls $U/5615b873*); V3=$(ls $U/21a5a11d*); V4=$(ls $U/efae7dc5*); V5=$(ls $U/3d2768c4*)
+V1=$(ls $U/3b903a31*); V2=$(ls $U/5615b873*); V3=$(ls $U/21a5a11d*); V4=$(ls $U/efae7dc5*); V5=$(ls $U/3d2768c4*); V6=$(ls $U/ef97632c*)
 ENC="-r 30 -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -c:a aac -b:a 160k -ar 48000 -ac 2"
 
 # caption: $1 big line, $2 small line, starts at 0.4s
@@ -42,15 +42,16 @@ clip 3 "$V2" 30 7 "Solo Ministry" "Lifting voices in praise"
 clip 4 "$V4" 27.13 14 "The Vocal Group" "Brought the whole house to its feet"
 clip 5 "$V5" 2 5  "Caribbean Joy" "Black, green and gold all night"
 clip 6 "$V5" 12 8 "Dancing in the Aisles" "Nobody could keep still"
+clip 9 "$V6" 7 10 "Everybody Up!" "From the stage to the back row"
 still 7 $R/proverbs-support-graphic.png 5 "$V4" 70
 still 8 $R/thank-you-graphic.png 6 "$V4" 75
-printf "file 'seg%d.mp4'\n" 0 1 2 3 4 5 6 7 8 > list.txt
+printf "file 'seg%d.mp4'\n" 0 1 2 3 4 5 6 9 7 8 > list.txt
 # Audio cleanup for the phone recording: repair clipping, remove rumble/mud,
 # lift vocal presence, light denoise, gentle compression and limiting.
 CLEAN="adeclip=window=55:overlap=75:arorder=8:threshold=10,highpass=f=85:poles=2,highpass=f=85:poles=2,equalizer=f=130:t=q:w=1.0:g=-2,equalizer=f=320:t=o:w=1.2:g=-4.5,equalizer=f=650:t=q:w=1.4:g=-1.5,equalizer=f=2800:t=o:w=1.6:g=4,equalizer=f=5000:t=q:w=1.2:g=2,treble=g=1.5:f=8000:t=s,lowpass=f=14500,afftdn=nr=8:nf=-40:tn=1,acompressor=threshold=0.125:ratio=2.5:attack=15:release=220:makeup=1.6:knee=4,alimiter=limit=0.89:attack=5:release=60:level=disabled"
 # Video from all segments; soundtrack = the vocal group's song (V4) from 0s.
 # Segment 4 starts at 27s of the video and uses V4 from 27s, so it stays lip-synced.
-TOTAL=$(for i in 0 1 2 3 4 5 6 7 8; do ffprobe -v error -show_entries format=duration -of csv=p=0 seg$i.mp4; done | paste -sd+ | bc)
+TOTAL=$(for i in 0 1 2 3 4 5 6 9 7 8; do ffprobe -v error -show_entries format=duration -of csv=p=0 seg$i.mp4; done | paste -sd+ | bc)
 FO=$(echo "$TOTAL-2.5" | bc)
 ffmpeg -v error -y -f concat -safe 0 -i list.txt -i "$V4" -map 0:v -map 1:a -t $TOTAL \
   -af "$CLEAN,afade=t=in:st=0:d=1,afade=t=out:st=$FO:d=2.5,loudnorm=I=-14:TP=-1:LRA=11" \
