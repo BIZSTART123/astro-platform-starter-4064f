@@ -1,16 +1,18 @@
 import React from "react";
 import { Composition, Folder } from "remotion";
 import { FPS, H, W } from "./theme";
-import { Offering, OFFERING_FRAMES } from "./episodes/offering/Offering";
-import { OfferingThen, OFFERING_THEN_FRAMES } from "./episodes/offering/ThenScene";
-import { OfferingNow, OFFERING_NOW_FRAMES } from "./episodes/offering/NowScene";
+import { EPISODES } from "./episodes";
 
 export const RemotionRoot: React.FC = () => (
   <>
-    <Folder name="Ep03-Scenes">
-      <Composition id="Ep03-Then" component={OfferingThen} width={W} height={H} fps={FPS} durationInFrames={OFFERING_THEN_FRAMES} />
-      <Composition id="Ep03-Now" component={OfferingNow} width={W} height={H} fps={FPS} durationInFrames={OFFERING_NOW_FRAMES} />
+    <Folder name="Scenes">
+      {EPISODES.flatMap((e) => [
+        <Composition key={`${e.id}-Then`} id={`${e.id}-Then`} component={e.Then} width={W} height={H} fps={FPS} durationInFrames={e.thenFrames} />,
+        <Composition key={`${e.id}-Now`} id={`${e.id}-Now`} component={e.Now} width={W} height={H} fps={FPS} durationInFrames={e.nowFrames} />,
+      ])}
     </Folder>
-    <Composition id="Ep03-TheOffering" component={Offering} width={W} height={H} fps={FPS} durationInFrames={OFFERING_FRAMES} />
+    {EPISODES.map((e) => (
+      <Composition key={e.id} id={e.id} component={e.Component} width={W} height={H} fps={FPS} durationInFrames={e.frames} />
+    ))}
   </>
 );

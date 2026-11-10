@@ -116,3 +116,160 @@ export const Auditorium: React.FC<{ frame: number; children?: React.ReactNode }>
     </AbsoluteFill>
   );
 };
+
+/** Front of the church: platform floor for a standing song leader. */
+export const Platform: React.FC = () => (
+  <AbsoluteFill style={{ pointerEvents: "none" }}>
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" height="100%">
+      <rect x={0} y={1460} width={W} height={460} fill="#7a4a2a" />
+      {Array.from({ length: 9 }).map((_, i) => (
+        <rect key={i} x={0} y={1470 + i * 50} width={W} height={4} fill="#5d351c" />
+      ))}
+      <rect x={0} y={1440} width={W} height={26} fill={C.mahoganyLight} />
+    </svg>
+  </AbsoluteFill>
+);
+
+/** Bright kids' church room with a TV, posters and beanbags. */
+export const KidsRoom: React.FC<{ frame: number }> = ({ frame }) => (
+  <AbsoluteFill>
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" height="100%">
+      <rect width={W} height={H} fill="#ffe9a8" />
+      <rect x={0} y={0} width={W} height={1200} fill="#9fd8ff" />
+      {[0, 1, 2, 3, 4, 5].map((i) => (
+        <circle key={i} cx={80 + i * 190} cy={120} r={40} fill={["#ff6b6b", "#ffd93d", "#6bcB77", "#4d96ff", "#c77dff", "#ff9f43"][i]} />
+      ))}
+      {/* TV with a cartoon whale */}
+      <rect x={140} y={260} width={520} height={330} rx={18} fill="#111" />
+      <rect x={160} y={280} width={480} height={290} fill="#4d96ff" />
+      <ellipse cx={400 + Math.sin(frame / 10) * 30} cy={440} rx={130} ry={70} fill="#2a5db0" />
+      <circle cx={460 + Math.sin(frame / 10) * 30} cy={420} r={10} fill="#fff" />
+      <path d={`M ${270 + Math.sin(frame / 10) * 30} 440 l -60 -40 l 0 80 Z`} fill="#2a5db0" />
+      {/* door with window */}
+      <rect x={760} y={260} width={240} height={780} fill="#f7f7f7" stroke="#d0d0d0" strokeWidth={10} />
+      <rect x={800} y={320} width={160} height={240} fill="#cfe7ff" stroke="#bbb" strokeWidth={8} />
+      <circle cx={790} cy={680} r={14} fill="#bbb" />
+      {/* foam mat floor */}
+      {Array.from({ length: 6 }).map((_, i) => (
+        <rect key={i} x={i * 180} y={1200} width={180} height={720} fill={["#ff6b6b", "#ffd93d", "#6bcB77", "#4d96ff", "#c77dff", "#ff9f43"][i]} opacity={0.75} />
+      ))}
+    </svg>
+  </AbsoluteFill>
+);
+
+/** The window in the kids' room door, drawn over anyone peeking through it. */
+export const KidsDoorFrame: React.FC = () => (
+  <AbsoluteFill style={{ pointerEvents: "none" }}>
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" height="100%">
+      <path d={`M 760 260 L 1000 260 L 1000 1040 L 760 1040 Z M 800 320 L 800 560 L 960 560 L 960 320 Z`} fill="#f7f7f7" fillRule="evenodd" />
+      <rect x={800} y={320} width={160} height={240} fill="none" stroke="#bbb" strokeWidth={8} />
+      <rect x={760} y={260} width={240} height={780} fill="none" stroke="#d0d0d0" strokeWidth={10} />
+      <circle cx={790} cy={680} r={14} fill="#bbb" />
+      <rect x={0} y={1040} width={1080} height={160} fill="#9fd8ff" />
+    </svg>
+  </AbsoluteFill>
+);
+
+/** Rural churchyard: sky, hills, mango tree, long table. */
+export const Churchyard: React.FC<{ frame: number }> = ({ frame }) => {
+  const sway = Math.sin(frame / 30) * 6;
+  return (
+    <AbsoluteFill>
+      <svg viewBox={`0 0 ${W} ${H}`} width="100%" height="100%">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#7cc6f0" />
+            <stop offset="1" stopColor="#fbe3a8" />
+          </linearGradient>
+        </defs>
+        <rect width={W} height={H} fill="url(#sky)" />
+        <path d="M 0 900 Q 270 760 540 880 Q 800 760 1080 870 L 1080 1100 L 0 1100 Z" fill="#5f9e5a" />
+        <rect x={0} y={1050} width={W} height={870} fill="#7ab65f" />
+        {/* church building */}
+        <g>
+          <rect x={620} y={640} width={360} height={380} fill="#f3efe4" />
+          <polygon points="600,650 800,500 1000,650" fill="#b3261e" />
+          <rect x={770} y={820} width={60} height={200} fill={C.mahogany} />
+          <rect x={792} y={430} width={16} height={80} fill="#fff" />
+          <rect x={776} y={450} width={48} height={14} fill="#fff" />
+        </g>
+        {/* mango tree */}
+        <rect x={130} y={560} width={70} height={520} fill="#6b4226" />
+        <g transform={`translate(${sway} 0)`}>
+          <circle cx={170} cy={480} r={240} fill="#2f7d3a" />
+          <circle cx={330} cy={560} r={170} fill="#3b8f45" />
+          <circle cx={30} cy={580} r={160} fill="#3b8f45" />
+          {[[120, 520], [260, 600], [60, 640], [210, 420], [340, 500]].map(([x, y], i) => (
+            <ellipse key={i} cx={x} cy={y} rx={18} ry={24} fill="#f2a33a" />
+          ))}
+        </g>
+      </svg>
+    </AbsoluteFill>
+  );
+};
+
+/** Long table with cloth and steaming pots, drawn in front of the people. */
+export const YardTable: React.FC<{ frame: number }> = ({ frame }) => (
+  <AbsoluteFill style={{ pointerEvents: "none" }}>
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" height="100%">
+      <rect x={-20} y={1360} width={W + 40} height={60} fill="#fff" />
+      <path d={`M -20 1420 ${Array.from({ length: 12 }).map((_, i) => `L ${i * 100 + 50} 1450 L ${i * 100 + 100} 1420`).join(" ")} L ${W + 20} 1420 L ${W + 20} 1600 L -20 1600 Z`} fill="#fff" />
+      <rect x={-20} y={1420} width={W + 40} height={8} fill="#d63c3c" />
+      <rect x={-20} y={1600} width={W + 40} height={320} fill="#6aa755" />
+      {[140, 900].map((x, i) => (
+        <g key={x}>
+          {[0, 1, 2].map((k) => (
+            <path key={k} d={`M ${x - 30 + k * 30} 1250 q -14 -20 0 -40 q 14 -20 0 -40`} stroke="#fff" strokeWidth={8} fill="none"
+              opacity={0.3 + 0.3 * Math.abs(Math.sin(frame / 12 + k + i))} />
+          ))}
+          <ellipse cx={x} cy={1270} rx={110} ry={20} fill="#aab2ba" />
+          <path d={`M ${x - 110} 1272 L ${x - 96} 1370 Q ${x} 1392 ${x + 96} 1370 L ${x + 110} 1272 Z`} fill="#c3cad1" stroke="#8b939b" strokeWidth={4} />
+        </g>
+      ))}
+    </svg>
+  </AbsoluteFill>
+);
+
+/** Church lobby café with a coffee bar and rainy glass doors. */
+export const Lobby: React.FC<{ frame: number }> = ({ frame }) => (
+  <AbsoluteFill>
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" height="100%">
+      <rect width={W} height={H} fill="#dfe3e6" />
+      {/* glass doors with rain */}
+      <rect x={60} y={300} width={420} height={900} fill="#5d6b78" />
+      {Array.from({ length: 40 }).map((_, i) => {
+        const x = 70 + ((i * 97) % 400);
+        const y = 300 + ((i * 211 + frame * 22) % 900);
+        return <rect key={i} x={x} y={y} width={3} height={40} fill="#c9d6e2" opacity={0.6} />;
+      })}
+      <rect x={60} y={300} width={420} height={900} fill="none" stroke="#2b2f33" strokeWidth={16} />
+      <rect x={264} y={300} width={12} height={900} fill="#2b2f33" />
+      <text x={270} y={270} fontSize={40} textAnchor="middle" fill="#2b2f33" fontFamily="Inter, sans-serif" fontWeight={700}>EXIT</text>
+      {/* coffee bar */}
+      <rect x={560} y={240} width={480} height={300} rx={12} fill="#2b2f33" />
+      <text x={800} y={300} fontSize={40} textAnchor="middle" fill="#fff" fontFamily="Inter, sans-serif" fontWeight={700}>CONNECT CAFÉ</text>
+      {[["LATTE", "6.50"], ["OAT FLAT WHITE", "7.25"], ["COLD BREW", "6.75"]].map(([n, p], i) => (
+        <g key={n}>
+          <text x={600} y={370 + i * 50} fontSize={30} fill="#e6e6e6" fontFamily="Inter, sans-serif">{n}</text>
+          <text x={1000} y={370 + i * 50} fontSize={30} fill="#e6e6e6" textAnchor="end" fontFamily="Inter, sans-serif">{p}</text>
+        </g>
+      ))}
+      <rect x={540} y={1180} width={540} height={60} fill="#c7b299" />
+      <rect x={540} y={1240} width={540} height={680} fill="#8e7a64" />
+      <rect x={0} y={1240} width={540} height={680} fill="#b9c0c6" />
+      {/* espresso machine */}
+      <rect x={880} y={1040} width={160} height={140} rx={10} fill="#a9b1b8" />
+      <rect x={900} y={1070} width={120} height={40} rx={6} fill="#2b2f33" />
+    </svg>
+  </AbsoluteFill>
+);
+
+/** Front counter of the lobby café, drawn over the barista. */
+export const LobbyCounter: React.FC = () => (
+  <AbsoluteFill style={{ pointerEvents: "none" }}>
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" height="100%">
+      <rect x={540} y={1180} width={540} height={60} fill="#c7b299" />
+      <rect x={540} y={1240} width={540} height={680} fill="#8e7a64" />
+    </svg>
+  </AbsoluteFill>
+);

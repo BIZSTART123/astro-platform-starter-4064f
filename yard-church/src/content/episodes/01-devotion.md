@@ -7,6 +7,7 @@ thenCaption: Sister leads the chorus with her eyes closed, and the whole church 
 nowCaption: The band has in-ear monitors and the lyrics are on the screen. The room stands still.
 thenVideo: ''
 nowVideo: ''
+episodeVideo: '/videos/ep01-devotion.mp4#vertical'
 thumbnail: ''
 publishDate: 2026-11-15
 draft: false

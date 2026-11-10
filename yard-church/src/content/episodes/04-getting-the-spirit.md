@@ -7,6 +7,7 @@ thenCaption: The ushers run with the white sheet while the church claps faster.
 nowCaption: '"Just feel free…" Silence. One man shifts his weight.'
 thenVideo: ''
 nowVideo: ''
+episodeVideo: '/videos/ep04-getting-the-spirit.mp4#vertical'
 thumbnail: ''
 publishDate: 2026-12-06
 draft: false

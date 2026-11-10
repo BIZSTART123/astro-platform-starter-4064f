@@ -7,6 +7,7 @@ thenCaption: He swings his feet, Mommy looks over her glasses, and he sits up st
 nowCaption: Kids' church has beanbags, snacks, and a cartoon Bible video on the tablets.
 thenVideo: ''
 nowVideo: ''
+episodeVideo: '/videos/ep05-pickney-behaviour.mp4#vertical'
 thumbnail: ''
 publishDate: 2026-12-13
 draft: false

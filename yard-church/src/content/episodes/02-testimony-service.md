@@ -7,6 +7,7 @@ thenCaption: Brother stands in the pew, Bible held high, and greets everybody be
 nowCaption: A polished testimony video plays on the big screen while the room watches.
 thenVideo: ''
 nowVideo: ''
+episodeVideo: '/videos/ep02-testimony-service.mp4#vertical'
 thumbnail: ''
 publishDate: 2026-11-22
 draft: false

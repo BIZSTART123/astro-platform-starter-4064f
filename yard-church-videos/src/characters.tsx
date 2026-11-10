@@ -64,8 +64,8 @@ const Mouth: React.FC<{ cx: number; cy: number; w: number; smile: number; talk: 
   );
 };
 
-export const MotherBrown: React.FC<Face & { outfit?: "white" | "coat"; fan?: number; showFan?: boolean }> = ({
-  outfit = "white", fan = 0, showFan = true, browL = 0, browR = 0, smile = 0, talk = 0, look = 0, squint = 0,
+export const MotherBrown: React.FC<Face & { outfit?: "white" | "coat"; fan?: number; showFan?: boolean; hat?: boolean }> = ({
+  outfit = "white", fan = 0, showFan = true, hat = true, browL = 0, browR = 0, smile = 0, talk = 0, look = 0, squint = 0,
 }) => {
   const skin = C.skinMid;
   const dress = outfit === "white" ? C.white : "#5b2a6e";
@@ -90,10 +90,13 @@ export const MotherBrown: React.FC<Face & { outfit?: "white" | "coat"; fan?: num
       <circle cx={102} cy={330} r={10} fill={C.gold} />
       <circle cx={298} cy={330} r={10} fill={C.gold} />
       {/* hat */}
+      {!hat && <path d="M 106 250 Q 110 176 200 172 Q 290 176 294 250 Q 270 214 200 212 Q 130 214 106 250 Z" fill="#9a9a9a" />}
+      {hat && <>
       <ellipse cx={200} cy={214} rx={196} ry={36} fill={outfit === "white" ? "#fff" : "#7d3a92"} stroke="#d9d2c4" strokeWidth={3} />
       <path d="M 100 214 Q 104 104 200 100 Q 296 104 300 214 Z" fill={outfit === "white" ? "#fff" : "#7d3a92"} />
       <rect x={100} y={186} width={200} height={26} fill={C.mahogany} />
       <circle cx={282} cy={198} r={20} fill={C.gold} />
+      </>}
       {/* face */}
       <Eyes cx={200} cy={295} gap={40} r={17} look={look} squint={squint} />
       {/* glasses */}
@@ -122,13 +125,19 @@ export const MotherBrown: React.FC<Face & { outfit?: "white" | "coat"; fan?: num
   );
 };
 
-export const Junior: React.FC<Face & { outfit?: "sunday" | "hoodie" }> = ({
+export const Junior: React.FC<Face & { outfit?: "sunday" | "hoodie" | "kid" }> = ({
   outfit = "sunday", browL = 0, browR = 0, smile = 0, talk = 0, look = 0, squint = 0,
 }) => {
   const skin = C.skinDeep;
   return (
     <svg viewBox="0 0 400 700" width="100%" height="100%" style={{ overflow: "visible", color: skin }}>
-      {outfit === "sunday" ? (
+      {outfit === "kid" ? (
+        <g>
+          <path d="M 80 700 L 95 480 Q 200 430 305 480 L 320 700 Z" fill="#fff" />
+          <path d="M 160 452 L 200 470 L 160 488 Z M 240 452 L 200 470 L 240 488 Z" fill="#1f3f8a" />
+          <circle cx={200} cy={470} r={9} fill="#1f3f8a" />
+        </g>
+      ) : outfit === "sunday" ? (
         <g>
           <path d="M 80 700 L 95 480 Q 200 430 305 480 L 320 700 Z" fill="#fff" />
           <path d="M 200 470 L 186 500 L 200 640 L 214 500 Z" fill="#b3261e" />
@@ -214,6 +223,110 @@ export const PastorJordan: React.FC<{ talk?: number; arms?: number }> = ({ talk 
       {/* headset mic */}
       <path d="M 120 240 Q 130 290 176 296" stroke="#d9d9d9" strokeWidth={4} fill="none" />
       <circle cx={178} cy={296} r={6} fill="#d9d9d9" />
+    </svg>
+  );
+};
+
+type Hair = "low" | "puff" | "locs" | "bald" | "wrap" | "bun" | "grey";
+type Top = "shirt" | "suit" | "tee" | "dress" | "hoodie";
+
+/**
+ * A configurable supporting character (Sister Pearl, Brother Campbell,
+ * band members, volunteers, kids). Same 400 x 700 frame as the leads.
+ */
+export const Person: React.FC<Face & {
+  skin?: string;
+  top?: Top;
+  topColor?: string;
+  tie?: string;
+  hair?: Hair;
+  hairColor?: string;
+  beard?: boolean;
+  glasses?: boolean;
+  lanyard?: boolean;
+  shirtText?: string;
+  inEar?: boolean;
+}> = ({
+  skin = C.skinMid, top = "shirt", topColor = "#fff", tie, hair = "low", hairColor = C.hair, beard = false,
+  glasses = false, lanyard = false, shirtText, inEar = false,
+  look = 0, browL = 0, browR = 0, smile = 0, talk = 0, squint = 0,
+}) => (
+  <svg viewBox="0 0 400 700" width="100%" height="100%" style={{ overflow: "visible", color: skin }}>
+    <path d="M 75 700 L 90 478 Q 200 425 310 478 L 325 700 Z" fill={topColor} />
+    {top === "suit" && (
+      <g>
+        <path d="M 165 450 L 200 560 L 235 450 Z" fill="#fff" />
+        {tie && <path d="M 200 465 L 188 495 L 200 600 L 212 495 Z" fill={tie} />}
+        <path d="M 165 450 L 200 600 L 150 470 Z M 235 450 L 200 600 L 250 470 Z" fill="rgba(0,0,0,0.25)" />
+      </g>
+    )}
+    {top === "shirt" && tie && <path d="M 200 465 L 188 495 L 200 620 L 212 495 Z" fill={tie} />}
+    {top === "dress" && <path d="M 150 455 Q 200 500 250 455" stroke="rgba(0,0,0,0.2)" strokeWidth={8} fill="none" />}
+    {top === "hoodie" && <path d="M 120 470 Q 200 520 280 470 Q 260 430 200 430 Q 140 430 120 470 Z" fill="rgba(0,0,0,0.15)" />}
+    {shirtText && (
+      <text x={200} y={585} fontSize={42} textAnchor="middle" fill="#fff" fontFamily="Inter, sans-serif" fontWeight={700}>{shirtText}</text>
+    )}
+    {lanyard && (
+      <g>
+        <path d="M 160 450 L 200 560 L 240 450" stroke="#2b6cff" strokeWidth={8} fill="none" />
+        <rect x={176} y={555} width={48} height={64} rx={6} fill="#fff" stroke="#ccc" strokeWidth={3} />
+      </g>
+    )}
+    <rect x={176} y={370} width={48} height={80} fill={skin} />
+    <ellipse cx={200} cy={295} rx={92} ry={106} fill={skin} />
+    <ellipse cx={108} cy={305} rx={15} ry={22} fill={skin} />
+    <ellipse cx={292} cy={305} rx={15} ry={22} fill={skin} />
+    {inEar && <circle cx={292} cy={308} r={8} fill="#f2f2f2" />}
+    {hair === "low" && <path d="M 110 268 Q 108 186 200 182 Q 292 186 290 268 Q 270 222 200 220 Q 130 222 110 268 Z" fill={hairColor} />}
+    {hair === "grey" && <path d="M 110 268 Q 108 186 200 182 Q 292 186 290 268 Q 270 222 200 220 Q 130 222 110 268 Z" fill="#c9c9c9" />}
+    {hair === "puff" && <circle cx={200} cy={170} r={120} fill={hairColor} style={{}} />}
+    {hair === "puff" && <ellipse cx={200} cy={295} rx={92} ry={106} fill={skin} />}
+    {hair === "bun" && <g fill={hairColor}><circle cx={200} cy={150} r={50} /><path d="M 108 270 Q 106 190 200 186 Q 294 190 292 270 Q 272 220 200 216 Q 128 220 108 270 Z" /></g>}
+    {hair === "locs" && (
+      <g fill={hairColor}>
+        <path d="M 104 290 Q 100 180 200 176 Q 300 180 296 290 Q 276 224 200 220 Q 124 224 104 290 Z" />
+        {[110, 130, 270, 290].map((x) => <rect key={x} x={x - 9} y={250} width={18} height={180} rx={9} />)}
+      </g>
+    )}
+    {hair === "wrap" && (
+      <g>
+        <path d="M 100 260 Q 96 130 200 120 Q 304 130 300 260 Q 280 210 200 206 Q 120 210 100 260 Z" fill={hairColor} />
+        <ellipse cx={240} cy={150} rx={56} ry={36} fill={hairColor} />
+      </g>
+    )}
+    <Eyes cx={200} cy={295} gap={38} r={16} look={look} squint={squint} />
+    {glasses && (
+      <g stroke="#2a2a2a" strokeWidth={6} fill="rgba(255,255,255,0.1)">
+        <rect x={138} y={270} width={52} height={48} rx={10} />
+        <rect x={210} y={270} width={52} height={48} rx={10} />
+        <path d="M 190 292 L 210 292" />
+      </g>
+    )}
+    <Brows cx={200} cy={258} gap={38} w={42} l={browL} r={browR} color={hair === "grey" ? "#bdbdbd" : C.hair} />
+    <path d="M 194 310 Q 200 332 210 326" stroke="rgba(0,0,0,0.35)" strokeWidth={5} fill="none" strokeLinecap="round" />
+    {beard && <path d="M 130 320 Q 200 410 270 320 Q 264 380 200 392 Q 136 380 130 320 Z" fill={hair === "grey" ? "#bdbdbd" : hairColor} />}
+    <Mouth cx={200} cy={356} w={52} smile={smile} talk={talk} lip="#2e1208" />
+  </svg>
+);
+
+/** A pair of hands that clap (0 = apart, 1 = together) or reach up. */
+export const Hands: React.FC<{ skin?: string; clap?: number; up?: number; sleeve?: string }> = ({
+  skin = C.skinMid, clap = 0, up = 0, sleeve = C.white,
+}) => {
+  const gap = 70 * (1 - clap);
+  const lift = up * 340;
+  return (
+    <svg viewBox="0 0 400 500" width="100%" height="100%" style={{ overflow: "visible" }}>
+      {[-1, 1].map((s) => {
+        const hx = 200 + s * (gap + 34 + up * 90);
+        const hy = 300 - lift;
+        return (
+          <g key={s}>
+            <path d={`M ${200 + s * 150} 520 Q ${200 + s * 140} ${420 - lift / 2} ${hx} ${hy + 40}`} stroke={sleeve} strokeWidth={56} strokeLinecap="round" fill="none" />
+            <ellipse cx={hx} cy={hy} rx={34} ry={46} fill={skin} />
+          </g>
+        );
+      })}
     </svg>
   );
 };

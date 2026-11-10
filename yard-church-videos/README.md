@@ -6,11 +6,14 @@ The episodes are drawn and animated in code with [Remotion](https://www.remotion
 
 | Path | What it is |
 |---|---|
-| `src/characters.tsx` | Mother Brown, Junior, the usher, Pastor Jordan, crowd silhouettes |
-| `src/sets.tsx` | The yard church (louvre windows, hymn board, pews) and the modern auditorium |
+| `src/characters.tsx` | Mother Brown, Junior, the usher, Pastor Jordan, crowd silhouettes, and `Person` for everyone else (Sister Pearl, Brother Campbell, the band, volunteers, kids) |
+| `src/sets.tsx` | The yard church, the churchyard, the modern auditorium, the kids' room and the lobby café |
+| `src/props.tsx` | Collection plate, tambourine, drum kit, hymnal, clock, Dutch pot and more |
 | `src/ui.tsx` | Title card, Then / Now cards, captions, closing vote card |
-| `src/episodes/offering/` | Episode 3, The Offering: the Then scene, the Now scene and the full timeline |
-| `scripts/make_offering_audio.py` | Synthesizes the organ, worship pad, coin clink, tambourine and other sounds |
+| `src/EpisodeShell.tsx` | The shape every episode shares: title, Then, Now, vote card, soundtrack |
+| `src/episodes.tsx` | The list of all six episodes |
+| `src/episodes/<name>/` | Each episode's Then and Now scenes |
+| `scripts/make_audio.py` | Synthesizes each episode's soundtrack: organ, worship pad, drums, tambourine, applause, crickets and more |
 | `public/fonts/` | Fonts, stored locally so rendering works offline |
 
 ## Preview and edit
@@ -21,16 +24,27 @@ npm install
 npm run dev
 ```
 
-This opens Remotion Studio, where you can scrub through the episode frame by frame. Captions are in the scene files, for example `src/episodes/offering/ThenScene.tsx`. Change the `text` on a `<Caption>` and the preview updates.
+This opens Remotion Studio, where you can scrub through the episode frame by frame. Captions are in the scene files, for example `src/episodes/devotion/Devotion.tsx`. Change the `text` on a `<Caption>` and the preview updates.
+
+## Episodes
+
+| # | Composition | Output file |
+|---|---|---|
+| 1 | `Ep01-Devotion` | `ep01-devotion.mp4` |
+| 2 | `Ep02-TestimonyService` | `ep02-testimony-service.mp4` |
+| 3 | `Ep03-TheOffering` | `ep03-the-offering.mp4` |
+| 4 | `Ep04-GettingTheSpirit` | `ep04-getting-the-spirit.mp4` |
+| 5 | `Ep05-PickneyBehaviour` | `ep05-pickney-behaviour.mp4` |
+| 6 | `Ep06-AfterChurch` | `ep06-after-church.mp4` |
 
 ## Render an episode
 
 ```sh
-python3 scripts/make_offering_audio.py   # only if you changed the sound timing
-npx remotion render Ep03-TheOffering ../yard-church/public/videos/ep03-the-offering.mp4 --codec=h264 --crf=23
+python3 scripts/make_audio.py devotion   # only if you changed the sound timing; no name = all six
+npx remotion render Ep01-Devotion ../yard-church/public/videos/ep01-devotion.mp4 --codec=h264 --crf=23
 ```
 
-The video is 1080 × 1920 (vertical, for TikTok, Reels and Shorts), 30 fps, about 40 seconds.
+Each video is 1080 × 1920 (vertical, for TikTok, Reels and Shorts), 30 fps, about 40 seconds.
 
 ## Adding voices
 

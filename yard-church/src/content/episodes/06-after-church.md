@@ -7,6 +7,7 @@ thenCaption: Dinner in the church yard. Nobody is in a hurry to leave.
 nowCaption: Coats on, coffee in hand, straight out to the car before the second service.
 thenVideo: ''
 nowVideo: ''
+episodeVideo: '/videos/ep06-after-church.mp4#vertical'
 thumbnail: ''
 publishDate: 2026-12-20
 draft: false
