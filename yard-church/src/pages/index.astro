@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import VideoEmbed from '../components/VideoEmbed.astro';
+import EpisodeCard from '../components/EpisodeCard.astro';
+import { SERIES } from '../config';
+import { getEpisodes } from '../utils';
+
+const episodes = await getEpisodes();
+---
+<Base>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="copy">
+        <span class="eyebrow">A series in six Sundays</span>
+        <h1><span class="t">Yard Church</span> <span class="vs">vs</span> <span class="n">Foreign Church</span></h1>
+        <p class="pitch">{SERIES.pitch}</p>
+        <a class="cta" href="#episodes">Watch the episodes</a>
+      </div>
+      <div class="trailer">
+        <VideoEmbed url={SERIES.trailer} side="trailer" label="Series trailer" />
+      </div>
+    </div>
+  </section>
+
+  <section id="episodes" class="container episodes">
+    <div class="head">
+      <h2>Episodes</h2>
+      <p>Each episode takes one part of Sunday service and shows it two ways.</p>
+    </div>
+    <div class="grid">
+      {episodes.map((ep) => <EpisodeCard episode={ep} />)}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding-block: 56px 64px; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, var(--wall) 0%, var(--wall-deep) 100%); }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 40px; align-items: center; }
+  @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } }
+  .copy { display: grid; gap: 18px; justify-items: start; }
+  h1 { font-size: clamp(40px, 7vw, 72px); line-height: .98; }
+  .t { color: var(--mahogany); display: block; }
+  .n { color: #2b2680; display: block; }
+  .vs { color: var(--muted); font-size: .45em; display: block; margin-block: 6px; }
+  .pitch { font-size: 19px; max-width: 42ch; }
+  .cta { background: var(--mahogany); color: #fff; text-decoration: none; font-weight: 600; padding: 12px 20px; border-radius: 999px; }
+  .cta:hover { background: #5f2c0f; }
+  .episodes { padding-block: 56px 0; display: grid; gap: 28px; }
+  .head { display: grid; gap: 8px; }
+  .head h2 { font-size: 40px; }
+  .head p { color: var(--muted); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 24px; }
+</style>

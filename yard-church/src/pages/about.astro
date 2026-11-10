@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="About" description="Why a Jamaican creator in the diaspora made Yard Church vs Foreign Church.">
+  <article class="container about">
+    <span class="eyebrow">About the series</span>
+    <h1>Why I made this</h1>
+    <div class="story">
+      <p class="todo">[WRITE YOUR STORY HERE: where you grew up in Jamaica, which church you went to, and who took you.]</p>
+      <p class="todo">[WRITE YOUR STORY HERE: when you migrated, and what church felt like the first Sunday abroad.]</p>
+      <p class="todo">[WRITE YOUR STORY HERE: what you miss, what you think new church gets right, and why you wanted to show both.]</p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .about { display: grid; gap: 16px; padding-block: 56px 0; max-width: 760px; }
+  h1 { font-size: clamp(40px, 7vw, 60px); color: var(--mahogany); }
+  .story { display: grid; gap: 18px; font-size: 18px; margin-top: 12px; }
+  .todo { background: #fff6dc; border: 1px dashed var(--gold); border-radius: 8px; padding: 14px 16px; color: var(--then-ink); }
+</style>
