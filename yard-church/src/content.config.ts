@@ -13,6 +13,8 @@ const episodes = defineCollection({
     // Paste a YouTube, YouTube Shorts, TikTok or .mp4 link. Leave empty for a placeholder.
     thenVideo: z.string().default(''),
     nowVideo: z.string().default(''),
+    // The finished episode (Then and Now together). Shown at the top of the page.
+    episodeVideo: z.string().default(''),
     // Optional image in /public, e.g. "/thumbs/devotion.jpg". Empty uses a designed split card.
     thumbnail: z.string().default(''),
     publishDate: z.coerce.date(),

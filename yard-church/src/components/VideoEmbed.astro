@@ -18,7 +18,7 @@ function parse(raw: string): Embed {
   const value = raw.trim();
   if (!value) return { kind: 'empty' };
   let u: URL;
-  try { u = new URL(value); } catch { return { kind: 'empty' }; }
+  try { u = new URL(value, 'https://local.invalid'); } catch { return { kind: 'empty' }; }
   const host = u.hostname.replace(/^www\.|^m\./, '');
   if (host === 'youtube.com') {
     const shorts = u.pathname.match(/^\/shorts\/([\w-]+)/);
@@ -35,7 +35,7 @@ function parse(raw: string): Embed {
     if (m) return { kind: 'iframe', src: `https://www.tiktok.com/embed/v2/${m[1]}`, vertical: true };
   }
   if (/\.(mp4|webm|mov)$/i.test(u.pathname)) {
-    return { kind: 'video', src: value, vertical: u.hash === '#vertical' };
+    return { kind: 'video', src: value.split('#')[0], vertical: u.hash === '#vertical' };
   }
   return { kind: 'link', src: value };
 }

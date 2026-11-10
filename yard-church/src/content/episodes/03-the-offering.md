@@ -7,6 +7,7 @@ thenCaption: Mother Brown leans over to see exactly what goes in the plate.
 nowCaption: '"Scan the code on your screen." Phones up, tap, done.'
 thenVideo: ''
 nowVideo: ''
+episodeVideo: '/videos/ep03-the-offering.mp4#vertical'
 thumbnail: ''
 publishDate: 2026-11-29
 draft: false

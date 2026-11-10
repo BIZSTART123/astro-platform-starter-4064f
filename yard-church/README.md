@@ -30,7 +30,9 @@ These links work:
 | `youtube.com/watch?v=…` or `youtu.be/…` | Wide (16:9) YouTube player |
 | `youtube.com/shorts/…` | Tall (9:16) YouTube player |
 | `tiktok.com/@you/video/…` | Tall TikTok player |
-| A link ending in `.mp4` | Video player (add `#vertical` to the end for a tall clip) |
+| A link ending in `.mp4`, or a file in `public` such as `/videos/ep03.mp4` | Video player (add `#vertical` to the end for a tall clip) |
+
+To show a finished episode at the top of its page, set `episodeVideo`, for example `episodeVideo: '/videos/ep03-the-offering.mp4#vertical'`. The animated episodes are made in `../yard-church-videos`.
 
 Leave a link empty (`''`) and the page shows a "coming soon" panel instead.
 
