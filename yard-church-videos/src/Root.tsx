@@ -14,5 +14,11 @@ export const RemotionRoot: React.FC = () => (
     {EPISODES.map((e) => (
       <Composition key={e.id} id={e.id} component={e.Component} width={W} height={H} fps={FPS} durationInFrames={e.frames} />
     ))}
+    <Folder name="TikTok">
+      {EPISODES.filter((e) => e.tiktok).map((e) => (
+        <Composition key={`${e.id}-TikTok`} id={`${e.id}-TikTok`} component={e.TikTok} width={W} height={H} fps={FPS}
+          durationInFrames={e.tiktokFramesTotal} />
+      ))}
+    </Folder>
   </>
 );

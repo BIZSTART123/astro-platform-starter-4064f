@@ -2,6 +2,12 @@ import React from "react";
 import { AbsoluteFill, Easing, interpolate, useCurrentFrame } from "remotion";
 import { C, clamp, H, inter, slab, W, work } from "./theme";
 
+/**
+ * Where captions sit. The TikTok cut lifts them above TikTok's own
+ * description text and keeps them clear of the buttons on the right.
+ */
+export const CaptionLayout = React.createContext({ bottom: 150, right: 80 });
+
 const pop = (frame: number, start: number) =>
   interpolate(frame, [start, start + 8], [0.85, 1], { ...clamp, easing: Easing.bezier(0.2, 1.4, 0.4, 1) });
 
@@ -14,6 +20,7 @@ export const Caption: React.FC<{
   world: "then" | "now";
 }> = ({ from, to, who, text, world }) => {
   const frame = useCurrentFrame();
+  const layout = React.useContext(CaptionLayout);
   if (frame < from || frame > to) return null;
   const then = world === "then";
   const out = interpolate(frame, [to - 6, to], [1, 0], clamp);
@@ -22,8 +29,8 @@ export const Caption: React.FC<{
       style={{
         position: "absolute",
         left: 80,
-        right: 80,
-        bottom: 150,
+        right: layout.right,
+        bottom: layout.bottom,
         opacity: out,
         scale: pop(frame, from),
         display: "flex",

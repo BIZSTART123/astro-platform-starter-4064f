@@ -37,6 +37,16 @@ This opens Remotion Studio, where you can scrub through the episode frame by fra
 | 5 | `Ep05-PickneyBehaviour` | `ep05-pickney-behaviour.mp4` |
 | 6 | `Ep06-AfterChurch` | `ep06-after-church.mp4` |
 
+## TikTok cuts
+
+Episodes 1–5 also have a TikTok version (`Ep01-Devotion-TikTok` and so on, built by `src/TikTokCut.tsx`). Each one opens on the punchline with hook text, then has a shorter title, shorter cards, captions lifted clear of TikTok's buttons and description, and a "Next:" line on the end card. Finished files are in `tiktok/`.
+
+```sh
+npx remotion render Ep01-Devotion-TikTok tiktok/ep01-devotion-tiktok.mp4 --codec=h264 --crf=23
+```
+
+Add music in the TikTok app, not in the file: pick a sound from TikTok's library and lower "Original sound" so the effects still come through.
+
 ## Render an episode
 
 ```sh
