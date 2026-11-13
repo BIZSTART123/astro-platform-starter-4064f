@@ -1,0 +1,76 @@
+---
+import '../styles/global.css';
+import { SERIES } from '../config';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+const { title, description = SERIES.description, image = '/og.png' } = Astro.props;
+const fullTitle = title ? `${title} · ${SERIES.title}` : SERIES.title;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(image, Astro.site);
+const socials = SERIES.socials.filter((s) => s.url);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Inter:wght@400;600&family=Work+Sans:wght@400;500;600&display=swap"
+    />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container bar">
+        <a class="brand" href="/">Yard Church <span>vs</span> Foreign Church</a>
+        <nav aria-label="Main">
+          <a href="/#episodes">Episodes</a>
+          <a href="/about">About</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container foot">
+        <p>{SERIES.title}. Made with love for every church mother who ever gave us the look.</p>
+        {socials.length > 0 && (
+          <ul class="socials">
+            {socials.map((s) => <li><a href={s.url} rel="noopener">{s.label}</a></li>)}
+          </ul>
+        )}
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .site-header { border-bottom: 1px solid var(--line); background: var(--wall); }
+  .bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; padding-block: 14px; }
+  .brand { font-family: var(--display); font-size: 20px; color: var(--mahogany); text-decoration: none; }
+  .brand span { color: var(--muted); font-size: .7em; }
+  nav { display: flex; gap: 20px; }
+  nav a { color: var(--ink); text-decoration: none; font-weight: 500; }
+  nav a:hover { text-decoration: underline; }
+  .site-footer { border-top: 1px solid var(--line); margin-top: 80px; }
+  .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; padding-block: 28px; color: var(--muted); font-size: 15px; }
+  .socials { display: flex; gap: 16px; list-style: none; margin: 0; padding: 0; }
+</style>

@@ -1,0 +1,63 @@
+/* Two worlds: "Then" is daylight on pastel church walls, "Now" is a dark stage. */
+:root {
+  --wall: #e7efe9;        /* pastel church-wall green, the page ground */
+  --wall-deep: #d4e2d8;
+  --ink: #1c2420;
+  --muted: #56635b;
+  --line: #c6d4ca;
+  --mahogany: #7a3b16;
+  --gold: #e0a43a;
+  --then-bg: #f7ead2;
+  --then-ink: #3b210f;
+  --now-bg: #0d0c1d;
+  --now-ink: #ecebff;
+  --violet: #8b84ff;
+  --blue: #59b6ff;
+  --display: 'Alfa Slab One', Rockwell, Georgia, serif;
+  --body: 'Work Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --clean: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --gutter: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--wall);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+}
+img, video, iframe { max-width: 100%; display: block; }
+a { color: var(--mahogany); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--violet); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3 { line-height: 1.1; text-wrap: balance; margin: 0; }
+h1, h2 { font-family: var(--display); font-weight: 400; }
+p { margin: 0; }
+
+.container {
+  width: 100%;
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter-r);
+}
+.eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.skip {
+  position: absolute; left: -9999px; top: 8px;
+  background: var(--ink); color: #fff; padding: 8px 12px; z-index: 10;
+}
+.skip:focus { left: 16px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}

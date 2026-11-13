@@ -1,0 +1,95 @@
+---
+// Turns a YouTube, YouTube Shorts, TikTok or .mp4 link into a player.
+// An empty link shows a designed placeholder in the matching world.
+interface Props {
+  url?: string;
+  side: 'then' | 'now' | 'trailer';
+  label: string;
+}
+const { url = '', side, label } = Astro.props;
+
+type Embed =
+  | { kind: 'iframe'; src: string; vertical: boolean }
+  | { kind: 'video'; src: string; vertical: boolean }
+  | { kind: 'link'; src: string }
+  | { kind: 'empty' };
+
+function parse(raw: string): Embed {
+  const value = raw.trim();
+  if (!value) return { kind: 'empty' };
+  let u: URL;
+  try { u = new URL(value, 'https://local.invalid'); } catch { return { kind: 'empty' }; }
+  const host = u.hostname.replace(/^www\.|^m\./, '');
+  if (host === 'youtube.com') {
+    const shorts = u.pathname.match(/^\/shorts\/([\w-]+)/);
+    if (shorts) return { kind: 'iframe', src: `https://www.youtube-nocookie.com/embed/${shorts[1]}`, vertical: true };
+    const id = u.searchParams.get('v');
+    if (id) return { kind: 'iframe', src: `https://www.youtube-nocookie.com/embed/${id}`, vertical: false };
+  }
+  if (host === 'youtu.be') {
+    const id = u.pathname.slice(1);
+    if (id) return { kind: 'iframe', src: `https://www.youtube-nocookie.com/embed/${id}`, vertical: false };
+  }
+  if (host === 'tiktok.com') {
+    const m = u.pathname.match(/\/video\/(\d+)/);
+    if (m) return { kind: 'iframe', src: `https://www.tiktok.com/embed/v2/${m[1]}`, vertical: true };
+  }
+  if (/\.(mp4|webm|mov)$/i.test(u.pathname)) {
+    return { kind: 'video', src: value.split('#')[0], vertical: u.hash === '#vertical' };
+  }
+  return { kind: 'link', src: value };
+}
+
+const embed = parse(url);
+const vertical = (embed.kind === 'iframe' || embed.kind === 'video') && embed.vertical;
+const placeholderText =
+  side === 'then' ? 'Then clip coming soon' : side === 'now' ? 'Now clip coming soon' : 'Trailer coming soon';
+---
+<div class:list={['player', side, { vertical }]}>
+  {embed.kind === 'iframe' && (
+    <iframe
+      src={embed.src}
+      title={label}
+      loading="lazy"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+    ></iframe>
+  )}
+  {embed.kind === 'video' && <video src={embed.src} controls playsinline preload="metadata" aria-label={label}></video>}
+  {embed.kind === 'link' && (
+    <a class="placeholder" href={embed.src} rel="noopener">Watch {label}</a>
+  )}
+  {embed.kind === 'empty' && (
+    <div class="placeholder" role="img" aria-label={`${label}: ${placeholderText}`}>
+      <span>{placeholderText}</span>
+    </div>
+  )}
+</div>
+
+<style>
+  .player { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #000; }
+  .player.vertical { aspect-ratio: 9 / 16; max-width: 380px; margin-inline: auto; }
+  iframe, video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .placeholder {
+    position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 16px;
+    color: #fff; font-weight: 600; text-decoration: none; font-size: 16px;
+  }
+  .placeholder span, a.placeholder { text-shadow: 0 1px 8px rgba(0,0,0,.6); }
+  .then .placeholder {
+    background:
+      repeating-linear-gradient(100deg, transparent 0 22px, rgba(255,236,190,.22) 22px 30px),
+      radial-gradient(120% 90% at 20% 10%, #f7d79a 0%, #c99a52 38%, #6e8a72 70%, #3f2a1a 100%);
+  }
+  .now .placeholder, .trailer .placeholder {
+    background:
+      linear-gradient(160deg, transparent 35%, rgba(150,140,255,.28) 48%, transparent 60%),
+      linear-gradient(200deg, transparent 38%, rgba(80,170,255,.22) 50%, transparent 62%),
+      radial-gradient(90% 70% at 50% 0%, #4a3fb8 0%, #1b1747 45%, #07070f 100%);
+  }
+  .trailer .placeholder {
+    background:
+      linear-gradient(90deg, rgba(0,0,0,0) 49.6%, rgba(255,255,255,.6) 49.6% 50.4%, rgba(0,0,0,0) 50.4%),
+      linear-gradient(90deg, #c99a52 0%, #6e8a72 50%, #1b1747 50%, #07070f 100%);
+    align-items: center; justify-content: center; font-family: var(--display); font-weight: 400; font-size: 22px;
+  }
+</style>

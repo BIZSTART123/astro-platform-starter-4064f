@@ -1,0 +1,128 @@
+---
+import Base from '../../layouts/Base.astro';
+import VideoEmbed from '../../components/VideoEmbed.astro';
+import { render } from 'astro:content';
+import { getEpisodes } from '../../utils';
+
+export async function getStaticPaths() {
+  const episodes = await getEpisodes();
+  return episodes.map((episode, i) => ({
+    params: { slug: episode.data.slug },
+    props: { episode, prev: episodes[i - 1], next: episodes[i + 1] },
+  }));
+}
+
+const { episode, prev, next } = Astro.props;
+const { data } = episode;
+const { Content } = await render(episode);
+const num = String(data.number).padStart(2, '0');
+---
+<Base title={data.title} description={data.hook} image={data.thumbnail || '/og.png'}>
+  <article>
+    <header class="container intro">
+      <span class="eyebrow">Episode {num}</span>
+      <h1>{data.title}</h1>
+      <p class="hook">{data.hook}</p>
+    </header>
+
+    {data.episodeVideo && (
+      <section class="container full" aria-label="Full episode">
+        <VideoEmbed url={data.episodeVideo} side="trailer" label={`${data.title}, full episode`} />
+      </section>
+    )}
+
+    <section class="compare" aria-label="Then and now">
+      <div class="side then">
+        <div class="inner">
+          <span class="label">Then · Yard church</span>
+          <VideoEmbed url={data.thenVideo} side="then" label={`${data.title}, then`} />
+          <p>{data.thenCaption}</p>
+        </div>
+      </div>
+      <div class="side now">
+        <div class="inner">
+          <span class="label">Now · Foreign church</span>
+          <VideoEmbed url={data.nowVideo} side="now" label={`${data.title}, now`} />
+          <p>{data.nowCaption}</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="container body">
+      <div class="notes"><Content /></div>
+
+      <section class="vote" data-slug={data.slug} aria-labelledby="vote-title">
+        <h2 id="vote-title">Which church won this round?</h2>
+        <div class="buttons">
+          <button type="button" class="pick then" data-choice="then" aria-pressed="false">Then</button>
+          <button type="button" class="pick now" data-choice="now" aria-pressed="false">Now</button>
+        </div>
+        <p class="result" aria-live="polite"></p>
+      </section>
+
+      <nav class="pager" aria-label="More episodes">
+        {prev ? <a href={`/episodes/${prev.data.slug}`}>← {prev.data.title}</a> : <span></span>}
+        {next ? <a href={`/episodes/${next.data.slug}`}>{next.data.title} →</a> : <a href="/#episodes">All episodes</a>}
+      </nav>
+    </div>
+  </article>
+</Base>
+
+<script>
+  const box = document.querySelector<HTMLElement>('.vote');
+  if (box) {
+    const key = `yc-vote-${box.dataset.slug}`;
+    const buttons = box.querySelectorAll<HTMLButtonElement>('.pick');
+    const result = box.querySelector<HTMLElement>('.result')!;
+    const show = (choice: string | null) => {
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.choice === choice)));
+      result.textContent =
+        choice === 'then' ? 'You picked yard church. Mother Brown approves.'
+        : choice === 'now' ? 'You picked foreign church. Fair enough, the coffee is good.'
+        : '';
+    };
+    let saved: string | null = null;
+    try { saved = localStorage.getItem(key); } catch {}
+    show(saved);
+    buttons.forEach((b) =>
+      b.addEventListener('click', () => {
+        const choice = b.dataset.choice!;
+        try { localStorage.setItem(key, choice); } catch {}
+        show(choice);
+      }),
+    );
+  }
+</script>
+
+<style>
+  .intro { padding-block: 48px 32px; display: grid; gap: 12px; }
+  .intro h1 { font-size: clamp(40px, 7vw, 64px); color: var(--mahogany); }
+  .hook { font-size: 19px; max-width: 60ch; color: var(--muted); }
+
+  .full { padding-block: 0 40px; }
+  .compare { display: grid; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 760px) { .compare { grid-template-columns: 1fr; } }
+  .side { padding-block: 32px 36px; }
+  .side .inner { display: grid; gap: 14px; max-width: 560px; padding-left: var(--gutter); padding-right: var(--gutter-r); }
+  .then { background: var(--then-bg); color: var(--then-ink); }
+  .then .inner { margin-left: auto; }
+  .now { background: var(--now-bg); color: var(--now-ink); font-family: var(--clean); }
+  .label { font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+  .then .label { color: var(--mahogany); font-family: var(--body); }
+  .now .label { color: var(--violet); }
+
+  .body { display: grid; gap: 40px; padding-block: 40px 0; max-width: 760px; }
+  .notes :global(p) { font-size: 18px; margin-bottom: 1em; }
+
+  .vote { display: grid; gap: 16px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 24px; }
+  .vote h2 { font-size: 26px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 12px; }
+  .pick { font: 600 17px var(--body); padding: 12px 28px; border-radius: 999px; cursor: pointer; border: 2px solid transparent; }
+  .pick.then { background: var(--then-bg); color: var(--mahogany); border-color: var(--mahogany); }
+  .pick.now { background: var(--now-bg); color: var(--now-ink); border-color: var(--now-bg); font-family: var(--clean); }
+  .pick[aria-pressed='true'].then { background: var(--mahogany); color: #fff; }
+  .pick[aria-pressed='true'].now { background: var(--violet); color: var(--now-bg); border-color: var(--violet); }
+  .result { color: var(--muted); min-height: 1.6em; }
+
+  .pager { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-weight: 600; }
+</style>
