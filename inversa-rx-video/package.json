@@ -17,6 +17,6 @@
   "scripts": {
     "dev": "remotion studio",
     "audio": "python3 scripts/make_audio.py",
-    "render": "remotion render BreakingNews out/inversa-rx-breaking-news.mp4 --codec h264 --crf 20"
+    "render": "remotion render BreakingNews out/inversa-rx-optical-breaking-news.mp4 --codec h264 --crf 20"
   }
 }

@@ -3,6 +3,7 @@ import {
   AbsoluteFill,
   Audio,
   Easing,
+  Img,
   Sequence,
   interpolate,
   spring,
@@ -15,21 +16,28 @@ import {
 /*  Props: edit these in Studio or in Root.tsx                        */
 /* ------------------------------------------------------------------ */
 export type BreakingNewsProps = {
+  /** Name used in headlines and the ticker. */
   brand: string;
-  /** Shown on the final card. Leave empty to show the tagline instead. */
   address: string;
-  hours: string;
+  crossStreet: string;
   phone: string;
-  tagline: string;
+  website: string;
+  doctorHours: string;
+  /** Headline offer on the end card. Leave empty to hide it. */
+  offer: string;
+  offerFinePrint: string;
   withAudio: boolean;
 };
 
 export const defaultBreakingNewsProps: BreakingNewsProps = {
-  brand: "Inversa Rx",
-  address: "",
-  hours: "",
-  phone: "",
-  tagline: "Your neighborhood pharmacy",
+  brand: "Inversa Rx Optical",
+  address: "3545 White Plains Rd, Bronx",
+  crossStreet: "Corner of White Plains Rd & E 213th St",
+  phone: "929-717-4415",
+  website: "inversarx.com",
+  doctorHours: "Eye doctor in Mon · Tue · Thu, 11–5",
+  offer: "$150 eye exam + a FREE frame",
+  offerFinePrint: "Frame from the Modern Optical collection. Lenses sold separately.",
   withAudio: true,
 };
 
@@ -42,17 +50,21 @@ const T = {
   report: 60, // missing-person report
   twist: 165, // glitch -> "it's YOU"
   ask: 255, // warm reveal: why haven't you stopped in?
-  cta: 360, // brand card
-  end: 465,
+  cta: 360, // brand card with the offer
+  end: 510,
 };
 export const DURATION = T.end;
 
+// News look
 const RED = "#E1141E";
 const RED_DARK = "#8E0A10";
-const NAVY = "#0A1430";
+const NAVY = "#0B1A3A";
 const GOLD = "#FFC21A";
-const TEAL = "#14B8A6";
-const CREAM = "#FFF8EE";
+// Inversa Rx Optical brand (sampled from the logo)
+const BLUE = "#0080FB";
+const GREEN = "#68DF83";
+const GREEN_DARK = "#1E9E4A";
+const STAR = "#F6A93B";
 const FONT = "Inter, 'Inter Display', 'DejaVu Sans', sans-serif";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
@@ -70,7 +82,6 @@ const NewsBackground: React.FC = () => {
         background: `radial-gradient(120% 80% at 50% 30%, #1B2B5E 0%, ${NAVY} 60%, #050A1A 100%)`,
       }}
     >
-      {/* moving "studio" light beams */}
       <AbsoluteFill
         style={{
           background: `linear-gradient(115deg, transparent ${sweep / 24 - 20}%, rgba(255,255,255,0.06) ${
@@ -78,7 +89,6 @@ const NewsBackground: React.FC = () => {
           }%, transparent ${sweep / 24 + 20}%)`,
         }}
       />
-      {/* globe grid */}
       <svg width="1080" height="1920" style={{ position: "absolute", opacity: 0.12 }}>
         {Array.from({ length: 9 }).map((_, i) => (
           <ellipse
@@ -98,7 +108,6 @@ const NewsBackground: React.FC = () => {
           return <ellipse key={`h${i}`} cx={540} cy={y} rx={r} ry={r * 0.12} fill="none" stroke="#7FA6FF" strokeWidth={2} />;
         })}
       </svg>
-      {/* scanlines */}
       <AbsoluteFill
         style={{
           backgroundImage: "repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0 2px, transparent 2px 5px)",
@@ -108,7 +117,7 @@ const NewsBackground: React.FC = () => {
   );
 };
 
-const LiveBug: React.FC<{ brand: string }> = ({ brand }) => {
+const LiveBug: React.FC = () => {
   const frame = useCurrentFrame();
   const blink = Math.floor(frame / 15) % 2 === 0 ? 1 : 0.25;
   return (
@@ -140,25 +149,28 @@ const LiveBug: React.FC<{ brand: string }> = ({ brand }) => {
           borderRadius: 8,
         }}
       >
-        {brand.toUpperCase()} NEWS
+        INVERSA RX NEWS
       </div>
     </div>
   );
 };
 
-/** The scrolling footer ticker, which carries the "real" message. */
-const Ticker: React.FC<{ brand: string }> = ({ brand }) => {
+/** Footer ticker: the real optical info, with a few jokes mixed in. */
+const Ticker: React.FC<BreakingNewsProps> = (p) => {
   const frame = useCurrentFrame();
+  const B = p.brand.toUpperCase();
   const items = [
-    `MISSING: ONE (1) REGULAR CUSTOMER`,
-    `LAST SEEN: NOT AT ${brand.toUpperCase()}`,
+    `LAST SEEN: NOT AT ${B}`,
+    p.offer && `${p.offer.toUpperCase()}*`,
+    p.doctorHours.toUpperCase(),
     `DAYS SINCE YOUR LAST VISIT: TOO MANY`,
-    `SOURCES SAY YOUR EXCUSE IS "WEAK AT BEST"`,
-    `EXPERTS CONFIRM: YOU'RE OVERDUE FOR A VISIT`,
-    `THIS HAS BEEN AN OFFICIAL GUILT TRIP™`,
-  ];
+    `META RAY-BAN SMART GLASSES IN STORE`,
+    `${p.address.toUpperCase()} • ${p.phone}`,
+    `EXPERTS CONFIRM: YOUR GLASSES ARE OVERDUE`,
+    `BETTER VISION. BETTER LIFE.`,
+  ].filter(Boolean);
   const text = items.join("   •   ") + "   •   ";
-  const x = -((frame * 7) % 2600);
+  const x = -(frame * 7);
   const slideUp = interpolate(frame, [8, 22], [140, 0], { ...clamp, easing: Easing.out(Easing.cubic) });
   return (
     <div
@@ -176,18 +188,18 @@ const Ticker: React.FC<{ brand: string }> = ({ brand }) => {
     >
       <div
         style={{
-          background: GOLD,
+          background: GREEN,
           color: NAVY,
           fontWeight: 900,
-          fontSize: 40,
-          padding: "0 26px",
+          fontSize: 38,
+          padding: "0 24px",
           display: "flex",
           alignItems: "center",
           zIndex: 2,
           letterSpacing: 2,
         }}
       >
-        UPDATE
+        OPTICAL
       </div>
       <div style={{ flex: 1, background: "white", overflow: "hidden", position: "relative", display: "flex", alignItems: "center" }}>
         <div
@@ -199,7 +211,6 @@ const Ticker: React.FC<{ brand: string }> = ({ brand }) => {
             fontSize: 44,
           }}
         >
-          {text}
           {text}
           {text}
         </div>
@@ -266,7 +277,6 @@ const Report: React.FC<{ brand: string }> = ({ brand }) => {
   const pulse = 1 + Math.sin(frame / 4) * 0.02;
   return (
     <AbsoluteFill style={{ fontFamily: FONT, alignItems: "center" }}>
-      {/* alert chip */}
       <div
         style={{
           marginTop: 330,
@@ -283,7 +293,6 @@ const Report: React.FC<{ brand: string }> = ({ brand }) => {
         ⚠ MISSING PERSON
       </div>
 
-      {/* silhouette "wanted" card */}
       <div
         style={{
           marginTop: 60,
@@ -323,8 +332,7 @@ const Report: React.FC<{ brand: string }> = ({ brand }) => {
         </div>
       </div>
 
-      {/* headline lower-third */}
-      <div style={{ position: "absolute", top: 1110, left: 50, right: 50 }}>
+      <div style={{ position: "absolute", top: 1110, left: 40, right: 40 }}>
         {lines.map((l, i) => {
           const p = spring({ frame: frame - 12 - i * 7, fps, config: { damping: 18 } });
           const isBrand = i === 1;
@@ -335,8 +343,8 @@ const Report: React.FC<{ brand: string }> = ({ brand }) => {
                   transform: `translateY(${interpolate(p, [0, 1], [110, 0])}%)`,
                   color: isBrand ? GOLD : "white",
                   fontWeight: 900,
-                  fontSize: isBrand ? 96 : 72,
-                  lineHeight: 1.1,
+                  fontSize: isBrand ? 84 : 72,
+                  lineHeight: 1.12,
                   textAlign: "center",
                   textShadow: "0 6px 24px rgba(0,0,0,0.6)",
                 }}
@@ -402,7 +410,6 @@ const Twist: React.FC = () => {
         >
           YOU.
         </div>
-        {/* pointing arrow */}
         <svg width="220" height="140" viewBox="0 0 220 140" style={{ marginTop: 30, transform: `translateY(${Math.sin(frame / 3) * 10}px)` }}>
           <path d="M110 130 L30 40 L80 40 L80 0 L140 0 L140 40 L190 40 Z" fill={RED} stroke="white" strokeWidth="6" />
         </svg>
@@ -411,60 +418,60 @@ const Twist: React.FC = () => {
   );
 };
 
-const Ask: React.FC<{ brand: string }> = ({ brand }) => {
+/** Side-eye wearing the logo's glasses. */
+const SideEyeGlasses: React.FC<{ look: number }> = ({ look }) => (
+  <svg width="760" height="300" viewBox="0 0 760 300">
+    {[0, 1].map((i) => {
+      const cx = 200 + i * 360;
+      return (
+        <g key={i}>
+          <clipPath id={`lens${i}`}>
+            <rect x={cx - 160} y={60} width={320} height={200} rx={70} />
+          </clipPath>
+          <rect x={cx - 160} y={60} width={320} height={200} rx={70} fill="white" />
+          <g clipPath={`url(#lens${i})`}>
+            <circle cx={cx + look} cy={175} r={52} fill={NAVY} />
+            <circle cx={cx + look + 16} cy={158} r={14} fill="white" />
+            {/* half-lidded, unimpressed */}
+            <rect x={cx - 170} y={50} width={340} height={88} fill={BLUE} />
+          </g>
+          <rect x={cx - 160} y={60} width={320} height={200} rx={70} fill="none" stroke={NAVY} strokeWidth={26} />
+        </g>
+      );
+    })}
+    {/* bridge */}
+    <path d="M354 120 Q380 92 406 120" fill="none" stroke={NAVY} strokeWidth={22} strokeLinecap="round" />
+    {/* temples */}
+    <path d="M40 110 L8 92" stroke={NAVY} strokeWidth={22} strokeLinecap="round" />
+    <path d="M720 110 L752 92" stroke={NAVY} strokeWidth={22} strokeLinecap="round" />
+  </svg>
+);
+
+const Ask: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const wipe = interpolate(frame, [0, 14], [0, 100], { ...clamp, easing: Easing.inOut(Easing.cubic) });
   const q = spring({ frame: frame - 10, fps, config: { damping: 14 } });
-  const sub = spring({ frame: frame - 34, fps, config: { damping: 16 } });
-  // eyes glance left/right
-  const look = interpolate(Math.sin(frame / 7), [-1, 1], [-14, 14]);
+  const sub = spring({ frame: frame - 36, fps, config: { damping: 16 } });
+  const look = interpolate(Math.sin(frame / 7), [-1, 1], [-46, 46]);
   return (
     <AbsoluteFill style={{ fontFamily: FONT }}>
       <AbsoluteFill
         style={{
           clipPath: `circle(${wipe * 1.5}% at 50% 45%)`,
-          background: `radial-gradient(90% 60% at 50% 40%, #FFFFFF 0%, ${CREAM} 55%, #FCE7C8 100%)`,
+          background: `radial-gradient(90% 60% at 50% 40%, #FFFFFF 0%, #EEF6FF 60%, #DCEBFF 100%)`,
           alignItems: "center",
           justifyContent: "center",
           paddingBottom: 120,
         }}
       >
-        {/* side-eye */}
-        <div style={{ display: "flex", gap: 46, transform: `scale(${q})` }}>
-          {[0, 1].map((i) => (
-            <div
-              key={i}
-              style={{
-                width: 190,
-                height: 150,
-                borderRadius: "50%",
-                background: "white",
-                border: `10px solid ${NAVY}`,
-                position: "relative",
-                overflow: "hidden",
-              }}
-            >
-              <div
-                style={{
-                  position: "absolute",
-                  width: 74,
-                  height: 74,
-                  borderRadius: 37,
-                  background: NAVY,
-                  top: 28,
-                  left: 48 + look,
-                }}
-              />
-              {/* half-lidded */}
-              <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: 52, background: TEAL }} />
-            </div>
-          ))}
+        <div style={{ transform: `scale(${q})` }}>
+          <SideEyeGlasses look={look} />
         </div>
 
         <div
           style={{
-            marginTop: 90,
+            marginTop: 70,
             padding: "0 70px",
             textAlign: "center",
             color: NAVY,
@@ -478,7 +485,7 @@ const Ask: React.FC<{ brand: string }> = ({ brand }) => {
         >
           Why haven't you
           <br />
-          <span style={{ color: TEAL }}>stopped in?</span>
+          <span style={{ color: BLUE }}>stopped in?</span>
         </div>
 
         <div
@@ -490,99 +497,110 @@ const Ask: React.FC<{ brand: string }> = ({ brand }) => {
             textAlign: "center",
             opacity: sub,
             transform: `translateY(${interpolate(sub, [0, 1], [40, 0])}px)`,
-            padding: "0 80px",
+            padding: "0 90px",
             lineHeight: 1.3,
           }}
         >
-          We noticed. {brand} misses you.
+          Your glasses called.
+          <br />
+          <span style={{ color: GREEN_DARK, fontWeight: 800 }}>They want an upgrade.</span>
         </div>
       </AbsoluteFill>
     </AbsoluteFill>
   );
 };
 
-const RxMark: React.FC<{ size: number }> = ({ size }) => (
-  <div
-    style={{
-      width: size,
-      height: size,
-      borderRadius: size * 0.28,
-      background: `linear-gradient(145deg, ${TEAL}, #0E7C70)`,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      boxShadow: "0 20px 50px rgba(20,184,166,0.45)",
-    }}
-  >
-    <span style={{ color: "white", fontFamily: FONT, fontWeight: 900, fontSize: size * 0.48, letterSpacing: -2 }}>℞</span>
-  </div>
-);
-
-const Cta: React.FC<BreakingNewsProps> = ({ brand, address, hours, phone, tagline }) => {
+const Cta: React.FC<BreakingNewsProps> = (p) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const logo = spring({ frame, fps, config: { damping: 10, stiffness: 150 } });
-  const name = spring({ frame: frame - 8, fps, config: { damping: 16 } });
-  const btn = spring({ frame: frame - 22, fps, config: { damping: 12 } });
-  const details = [address, hours, phone].filter((d) => d.trim().length > 0);
+  const logo = spring({ frame, fps, config: { damping: 13, stiffness: 140 } });
+  const offer = spring({ frame: frame - 14, fps, config: { damping: 12 } });
+  const btn = spring({ frame: frame - 30, fps, config: { damping: 12 } });
+  const info = spring({ frame: frame - 42, fps, config: { damping: 18 } });
   const breathe = 1 + Math.sin(frame / 6) * 0.025;
+  const starSpin = frame * 2;
   return (
     <AbsoluteFill
       style={{
         fontFamily: FONT,
         alignItems: "center",
         justifyContent: "center",
-        paddingBottom: 120,
-        background: `radial-gradient(100% 70% at 50% 35%, #12305A 0%, ${NAVY} 70%)`,
+        paddingBottom: 60,
+        background: "linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 55%, #EAF4FF 100%)",
       }}
     >
-      <div style={{ transform: `scale(${logo}) rotate(${interpolate(logo, [0, 1], [-25, 0])}deg)` }}>
-        <RxMark size={260} />
+      {/* brand stripe */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 26, background: BLUE }} />
+      <div style={{ position: "absolute", top: 26, left: 0, right: 0, height: 10, background: GREEN }} />
+
+      <div style={{ transform: `scale(${interpolate(logo, [0, 1], [0.6, 1])})`, opacity: logo }}>
+        <Img src={staticFile("inversa-rx-optical-logo.png")} style={{ width: 900 }} />
       </div>
-      <div
-        style={{
-          marginTop: 50,
-          color: "white",
-          fontWeight: 900,
-          fontSize: 120,
-          letterSpacing: -3,
-          opacity: name,
-          transform: `translateY(${interpolate(name, [0, 1], [50, 0])}px)`,
-        }}
-      >
-        {brand}
-      </div>
-      <div style={{ color: "rgba(255,255,255,0.75)", fontWeight: 600, fontSize: 44, marginTop: 6, opacity: name }}>
-        {details.length === 0 ? tagline : ""}
-      </div>
+
+      {p.offer && (
+        <div
+          style={{
+            marginTop: 70,
+            position: "relative",
+            background: NAVY,
+            color: "white",
+            borderRadius: 36,
+            padding: "36px 50px 30px",
+            width: 900,
+            textAlign: "center",
+            transform: `scale(${offer})`,
+            boxShadow: "0 24px 60px rgba(11,26,58,0.28)",
+          }}
+        >
+          <svg
+            width="78"
+            height="78"
+            viewBox="0 0 24 24"
+            style={{ position: "absolute", top: -34, right: 40, transform: `rotate(${starSpin}deg)` }}
+          >
+            <path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 20.9l1.6-7L2 9.2l7.1-.6z" fill={STAR} />
+          </svg>
+          <div style={{ color: GREEN, fontWeight: 800, fontSize: 38, letterSpacing: 4 }}>THIS MONTH'S EXCUSE-ERASER</div>
+          <div style={{ fontWeight: 900, fontSize: 70, lineHeight: 1.1, marginTop: 12 }}>{p.offer}*</div>
+          <div style={{ color: "rgba(255,255,255,0.7)", fontWeight: 500, fontSize: 30, marginTop: 14 }}>
+            *{p.offerFinePrint}
+          </div>
+        </div>
+      )}
 
       <div
         style={{
-          marginTop: 70,
-          background: GOLD,
-          color: NAVY,
+          marginTop: 56,
+          background: BLUE,
+          color: "white",
           fontWeight: 900,
-          fontSize: 66,
-          padding: "30px 60px",
+          fontSize: 64,
+          padding: "28px 64px",
           borderRadius: 999,
           transform: `scale(${btn * breathe})`,
-          boxShadow: "0 18px 50px rgba(255,194,26,0.4)",
+          boxShadow: "0 18px 50px rgba(0,128,251,0.4)",
         }}
       >
         Stop in this week
       </div>
 
-      {details.length > 0 && (
-        <div style={{ marginTop: 50, textAlign: "center", opacity: btn }}>
-          {details.map((d) => (
-            <div key={d} style={{ color: "white", fontWeight: 600, fontSize: 46, lineHeight: 1.45 }}>
-              {d}
-            </div>
-          ))}
+      <div
+        style={{
+          marginTop: 50,
+          textAlign: "center",
+          color: NAVY,
+          opacity: info,
+          transform: `translateY(${interpolate(info, [0, 1], [30, 0])}px)`,
+        }}
+      >
+        <div style={{ fontWeight: 800, fontSize: 50 }}>{p.address}</div>
+        <div style={{ fontWeight: 500, fontSize: 34, color: "#4A5878", marginTop: 6 }}>{p.crossStreet}</div>
+        <div style={{ fontWeight: 600, fontSize: 40, marginTop: 22 }}>{p.doctorHours}</div>
+        <div style={{ fontWeight: 900, fontSize: 60, color: BLUE, marginTop: 22 }}>
+          {p.phone}
+          <span style={{ color: "#9AA6BF", fontWeight: 500 }}> · </span>
+          <span style={{ color: GREEN_DARK, fontSize: 48 }}>{p.website}</span>
         </div>
-      )}
-      <div style={{ marginTop: 40, color: "rgba(255,255,255,0.6)", fontSize: 38, fontWeight: 600, opacity: btn }}>
-        No more excuses.
       </div>
     </AbsoluteFill>
   );
@@ -593,33 +611,32 @@ const Cta: React.FC<BreakingNewsProps> = ({ brand, address, hours, phone, taglin
 /* ------------------------------------------------------------------ */
 
 export const BreakingNews: React.FC<BreakingNewsProps> = (props) => {
-  const { brand, withAudio } = props;
   return (
     <AbsoluteFill style={{ background: NAVY }}>
-      {/* News segment: background, live bug and ticker run until the warm reveal */}
+      {/* News segment: background, live bug and optical ticker run until the reveal */}
       <Sequence from={T.open} durationInFrames={T.ask - T.open} layout="none">
         <NewsBackground />
         <Sequence from={T.open} durationInFrames={T.report} layout="none">
           <OpenSlam />
         </Sequence>
         <Sequence from={T.report} durationInFrames={T.twist - T.report} layout="none">
-          <Report brand={brand} />
+          <Report brand={props.brand} />
         </Sequence>
         <Sequence from={T.twist} durationInFrames={T.ask - T.twist} layout="none">
           <Twist />
         </Sequence>
-        <LiveBug brand={brand} />
-        <Ticker brand={brand} />
+        <LiveBug />
+        <Ticker {...props} />
       </Sequence>
 
       <Sequence from={T.ask} durationInFrames={T.cta - T.ask}>
-        <Ask brand={brand} />
+        <Ask />
       </Sequence>
       <Sequence from={T.cta} durationInFrames={T.end - T.cta}>
         <Cta {...props} />
       </Sequence>
 
-      {withAudio && <Audio src={staticFile("audio/breaking-news.wav")} />}
+      {props.withAudio && <Audio src={staticFile("audio/breaking-news.wav")} />}
     </AbsoluteFill>
   );
 };

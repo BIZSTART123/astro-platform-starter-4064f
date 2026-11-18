@@ -9,7 +9,7 @@ import numpy as np
 
 SR = 48000
 FPS = 30
-DUR = 465 / FPS
+DUR = 510 / FPS
 t_all = np.arange(int(SR * DUR)) / SR
 mix = np.zeros_like(t_all)
 rng = np.random.default_rng(7)
@@ -100,7 +100,7 @@ for ch, s in [([130.8, 196.0, 261.6], 258), ([174.6, 220.0, 261.6], 290), ([196.
     add(f(s), chord(ch, 1.2, "sine", r=0.7), 0.22)
 
 # 5. CTA: warm resolve + chime, frames 360-465
-add(f(360), chord([130.8, 196.0, 261.6, 329.6, 392.0], 3.4, "sine", r=1.6), 0.3)
+add(f(360), chord([130.8, 196.0, 261.6, 329.6, 392.0], 4.8, "sine", r=2.2), 0.3)
 for i, fr in enumerate([1046.5, 1318.5, 1568.0, 2093.0]):
     add(f(362) + i * 0.09, tone(fr, 1.2, "sine", r=0.5), 0.1)
 
