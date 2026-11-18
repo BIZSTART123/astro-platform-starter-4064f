@@ -17,6 +17,10 @@ The goal: in the chat list and the chat, this looks like *you* checking in. The 
 - `Ok be honest… 😂`
 - `Quick question for you lol 👀`
 
+**V4: The Boys** (thumbnail: "bro… 💀"), for your guy friends
+- `Bro 😂😂 the boys had to say something`
+- `Yo… this you? 💀`
+
 Keep it to one short line, like a normal text. No links, prices or "special offer" in the
 caption: that's what makes a message look like an ad before it's opened.
 

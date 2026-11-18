@@ -203,3 +203,20 @@ for i in range(int(f(268) / 0.25)):  # curious arpeggio while the test runs
 progression(mus, 0.0, f(268), [["A2", "E3", "A3"], ["F2", "C3", "A3"]], 2.0, "sine", 0.22, 1.2)
 progression(mus, f(268), f(END), [["C3", "E3", "G3", "C4"], ["G2", "D3", "G3", "B3"], ["A2", "E3", "A3", "C4"], ["F2", "C3", "F3", "A3"]], 1.6, "keys", 0.3, 1.2)
 mus.save("public/audio/music-v3.wav", peak=0.8)
+
+# ---------------- v4: The Boys group chat (546 frames, jingle 2 in D major) ----------------
+END = 546
+sfx = Track(END)
+for fr in [22, 60, 98, 130, 174, 226, 270, 306, 360]:
+    sfx.add(f(fr), pop(), 0.5)
+sfx.add(f(174), tone(note("A5"), 0.4, r=0.2), 0.12)
+sfx.add(f(360) + 0.06, tone(note("D6"), 0.3, r=0.15), 0.12)
+for i, n in enumerate(["D6", "F#6", "A6", "D7"]):
+    sfx.add(f(398) + i * 0.09, tone(note(n), 1.2, r=0.5), 0.1)
+sfx.save("public/audio/sfx-v4.wav")
+
+mus = Track(END)
+bar = 60 / 90 * 4
+progression(mus, 0.0, f(END), [["D3", "F#3", "A3", "C#4"], ["B2", "D3", "F#3", "A3"], ["G2", "B2", "D3", "F#3"], ["A2", "C#3", "E3", "G3"]], bar, r=1.4)
+drums(mus, 0.0, f(END), 90, 0.32)
+mus.save("public/audio/music-v4.wav", peak=0.8)

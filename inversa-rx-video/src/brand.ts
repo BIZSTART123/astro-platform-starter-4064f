@@ -44,6 +44,8 @@ export type BrandProps = {
   music: string;
   /** Skip into the Suno track, e.g. 12 to start at its hook instead of its intro. */
   musicStartSeconds: number;
+  /** Wait this long before the music starts. */
+  musicDelaySeconds: number;
   musicVolume: number;
   sfxVolume: number;
   withAudio: boolean;
@@ -69,6 +71,7 @@ export const defaultBrandProps: BrandProps = {
     "Free exam requires a frame purchase. Eligible cards, participating plans only. Coverage varies by plan and available balance.",
   music: "",
   musicStartSeconds: 0,
+  musicDelaySeconds: 0,
   musicVolume: 0.55,
   sfxVolume: 1,
   withAudio: true,

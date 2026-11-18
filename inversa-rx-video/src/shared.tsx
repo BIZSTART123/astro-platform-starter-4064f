@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, Audio, Easing, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Audio, Easing, Img, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { BLUE, BrandProps, FONT, GREEN, GREEN_DEEP, NAVY, RED, STAR, clamp } from "./brand";
 
 /* ------------------------------------------------------------------ */
@@ -223,14 +223,16 @@ export const Soundtrack: React.FC<{ id: string; p: BrandProps; durationInFrames:
   return (
     <>
       <Audio src={staticFile(`audio/sfx-${id}.wav`)} volume={p.sfxVolume} />
-      <Audio
-        src={musicSrc}
-        trimBefore={p.music ? Math.round(p.musicStartSeconds * 30) : undefined}
-        volume={(f) =>
-          p.musicVolume *
-          interpolate(f, [0, 10, durationInFrames - fadeOut, durationInFrames], [0, 1, 1, 0], clamp)
-        }
-      />
+      <Sequence from={Math.round(p.musicDelaySeconds * 30)} layout="none">
+        <Audio
+          src={musicSrc}
+          trimBefore={p.music ? Math.round(p.musicStartSeconds * 30) : undefined}
+          volume={(f) => {
+            const len = durationInFrames - Math.round(p.musicDelaySeconds * 30);
+            return p.musicVolume * interpolate(f, [0, 10, len - fadeOut, len], [0, 1, 1, 0], clamp);
+          }}
+        />
+      </Sequence>
     </>
   );
 };
