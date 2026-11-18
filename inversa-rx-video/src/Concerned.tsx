@@ -22,7 +22,7 @@ const END = 522;
 export const CONCERNED_DURATION = END;
 
 export type ConcernedProps = BrandProps;
-export const defaultConcernedProps: ConcernedProps = withJingle(4.5);
+export const defaultConcernedProps: ConcernedProps = withJingle(2.6, "inversa-rx-jingle-v2.mp3"); // new jingle: verse starts at 4.6s
 
 // Rough height of a bubble, used to scroll the thread as it fills.
 const bubbleHeight = (m: Msg) => {
