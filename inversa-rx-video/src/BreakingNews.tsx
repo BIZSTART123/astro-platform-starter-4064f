@@ -22,22 +22,36 @@ export type BreakingNewsProps = {
   crossStreet: string;
   phone: string;
   website: string;
-  doctorHours: string;
-  /** Headline offer on the end card. Leave empty to hide it. */
-  offer: string;
-  offerFinePrint: string;
+  instagram: string;
+  appointments: string;
+  examDeal: string;
+  examWas: string;
+  examCondition: string;
+  framesDeal: string;
+  framesCondition: string;
+  benefits: string;
+  benefitsNote: string;
+  finePrint: string;
   withAudio: boolean;
 };
 
+// Matches the "OTC & Vision Benefits Accepted" flyer.
 export const defaultBreakingNewsProps: BreakingNewsProps = {
   brand: "Inversa Rx Optical",
   address: "3545 White Plains Rd, Bronx",
   crossStreet: "Corner of White Plains Rd & E 213th St",
-  phone: "929-717-4415",
-  website: "inversarx.com",
-  doctorHours: "Eye doctor in Mon · Tue · Thu, 11–5",
-  offer: "$150 eye exam + a FREE frame",
-  offerFinePrint: "Frame from the Modern Optical collection. Lenses sold separately.",
+  phone: "(929) 717-4415",
+  website: "InversaRx.com/optical",
+  instagram: "@inversarx_pharmacy",
+  appointments: "Eye exams by appointment",
+  examDeal: "FREE",
+  examWas: "$75",
+  examCondition: "eye exam with frame purchase",
+  framesDeal: "25% OFF",
+  framesCondition: "all frames",
+  benefits: "OTC & vision benefits accepted",
+  benefitsNote: "Bring your benefit card. We'll check your eligibility and balance.",
+  finePrint: "Free exam requires a frame purchase. Eligible cards, participating plans only. Coverage varies by plan and available balance.",
   withAudio: true,
 };
 
@@ -161,12 +175,13 @@ const Ticker: React.FC<BreakingNewsProps> = (p) => {
   const B = p.brand.toUpperCase();
   const items = [
     `LAST SEEN: NOT AT ${B}`,
-    p.offer && `${p.offer.toUpperCase()}*`,
-    p.doctorHours.toUpperCase(),
+    `FREE EYE EXAM (${p.examWas} VALUE) WITH FRAME PURCHASE*`,
     `DAYS SINCE YOUR LAST VISIT: TOO MANY`,
-    `META RAY-BAN SMART GLASSES IN STORE`,
-    `${p.address.toUpperCase()} • ${p.phone}`,
+    `${p.framesDeal} ${p.framesCondition.toUpperCase()}`,
+    `${p.benefits.toUpperCase()}: BRING YOUR BENEFIT CARD`,
     `EXPERTS CONFIRM: YOUR GLASSES ARE OVERDUE`,
+    `EYE EXAMS • PRESCRIPTION EYEGLASSES • READING GLASSES`,
+    `${p.address.toUpperCase()} • ${p.phone}`,
     `BETTER VISION. BETTER LIFE.`,
   ].filter(Boolean);
   const text = items.join("   •   ") + "   •   ";
@@ -514,68 +529,107 @@ const Cta: React.FC<BreakingNewsProps> = (p) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const logo = spring({ frame, fps, config: { damping: 13, stiffness: 140 } });
-  const offer = spring({ frame: frame - 14, fps, config: { damping: 12 } });
-  const btn = spring({ frame: frame - 30, fps, config: { damping: 12 } });
-  const info = spring({ frame: frame - 42, fps, config: { damping: 18 } });
+  const tileA = spring({ frame: frame - 12, fps, config: { damping: 12 } });
+  const tileB = spring({ frame: frame - 20, fps, config: { damping: 12 } });
+  const ben = spring({ frame: frame - 30, fps, config: { damping: 16 } });
+  const btn = spring({ frame: frame - 40, fps, config: { damping: 12 } });
+  const info = spring({ frame: frame - 50, fps, config: { damping: 18 } });
   const breathe = 1 + Math.sin(frame / 6) * 0.025;
-  const starSpin = frame * 2;
+  const strike = interpolate(frame, [26, 36], [0, 100], clamp);
+  const tile: React.CSSProperties = {
+    flex: 1,
+    borderRadius: 30,
+    padding: "26px 18px 24px",
+    textAlign: "center",
+    background: "white",
+    boxShadow: "0 16px 40px rgba(11,26,58,0.14)",
+  };
   return (
     <AbsoluteFill
       style={{
         fontFamily: FONT,
         alignItems: "center",
         justifyContent: "center",
-        paddingBottom: 60,
-        background: "linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 55%, #EAF4FF 100%)",
+        paddingBottom: 40,
+        background: "linear-gradient(180deg, #FFFFFF 0%, #F4F9FF 50%, #E3F0FF 100%)",
       }}
     >
-      {/* brand stripe */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 26, background: BLUE }} />
       <div style={{ position: "absolute", top: 26, left: 0, right: 0, height: 10, background: GREEN }} />
 
       <div style={{ transform: `scale(${interpolate(logo, [0, 1], [0.6, 1])})`, opacity: logo }}>
-        <Img src={staticFile("inversa-rx-optical-logo.png")} style={{ width: 900 }} />
+        <Img src={staticFile("inversa-rx-optical-logo.png")} style={{ width: 760 }} />
       </div>
 
-      {p.offer && (
-        <div
-          style={{
-            marginTop: 70,
-            position: "relative",
-            background: NAVY,
-            color: "white",
-            borderRadius: 36,
-            padding: "36px 50px 30px",
-            width: 900,
-            textAlign: "center",
-            transform: `scale(${offer})`,
-            boxShadow: "0 24px 60px rgba(11,26,58,0.28)",
-          }}
-        >
-          <svg
-            width="78"
-            height="78"
-            viewBox="0 0 24 24"
-            style={{ position: "absolute", top: -34, right: 40, transform: `rotate(${starSpin}deg)` }}
-          >
-            <path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 20.9l1.6-7L2 9.2l7.1-.6z" fill={STAR} />
+      {/* two offer tiles */}
+      <div style={{ display: "flex", gap: 30, width: 960, marginTop: 56 }}>
+        <div style={{ ...tile, border: `5px solid ${BLUE}`, transform: `scale(${tileA})` }}>
+          <div style={{ position: "relative", display: "inline-block", color: RED, fontWeight: 800, fontSize: 50 }}>
+            {p.examWas}
+            <div
+              style={{
+                position: "absolute",
+                left: -6,
+                top: "52%",
+                height: 6,
+                width: `calc(${strike}% + 12px)`,
+                background: RED,
+                transform: "rotate(-8deg)",
+              }}
+            />
+          </div>
+          <div style={{ color: GREEN_DARK, fontWeight: 900, fontSize: 104, lineHeight: 1, letterSpacing: -2 }}>{p.examDeal}</div>
+          <div style={{ color: NAVY, fontWeight: 800, fontSize: 38, marginTop: 10, lineHeight: 1.15 }}>{p.examCondition}*</div>
+        </div>
+        <div style={{ ...tile, border: `5px solid ${GREEN}`, transform: `scale(${tileB})` }}>
+          <svg width="96" height="50" viewBox="0 0 96 50" style={{ marginTop: 6 }}>
+            <rect x="4" y="8" width="36" height="30" rx="12" fill="none" stroke={GREEN_DARK} strokeWidth="7" />
+            <rect x="56" y="8" width="36" height="30" rx="12" fill="none" stroke={GREEN_DARK} strokeWidth="7" />
+            <path d="M40 18 Q48 10 56 18" fill="none" stroke={GREEN_DARK} strokeWidth="6" />
           </svg>
-          <div style={{ color: GREEN, fontWeight: 800, fontSize: 38, letterSpacing: 4 }}>THIS MONTH'S EXCUSE-ERASER</div>
-          <div style={{ fontWeight: 900, fontSize: 70, lineHeight: 1.1, marginTop: 12 }}>{p.offer}*</div>
-          <div style={{ color: "rgba(255,255,255,0.7)", fontWeight: 500, fontSize: 30, marginTop: 14 }}>
-            *{p.offerFinePrint}
+          <div style={{ color: GREEN_DARK, fontWeight: 900, fontSize: 96, lineHeight: 1, letterSpacing: -2 }}>{p.framesDeal}</div>
+          <div style={{ color: NAVY, fontWeight: 800, fontSize: 38, marginTop: 10 }}>{p.framesCondition}</div>
+        </div>
+      </div>
+
+      {/* benefits banner */}
+      <div
+        style={{
+          marginTop: 30,
+          width: 960,
+          background: NAVY,
+          color: "white",
+          borderRadius: 30,
+          padding: "26px 36px",
+          display: "flex",
+          alignItems: "center",
+          gap: 26,
+          opacity: ben,
+          transform: `translateY(${interpolate(ben, [0, 1], [40, 0])}px)`,
+        }}
+      >
+        <svg width="92" height="68" viewBox="0 0 92 68" style={{ flexShrink: 0 }}>
+          <rect x="3" y="3" width="86" height="62" rx="10" fill={BLUE} />
+          <rect x="3" y="16" width="86" height="12" fill={NAVY} />
+          <rect x="12" y="40" width="34" height="8" rx="4" fill="white" />
+          <circle cx="72" cy="47" r="10" fill={STAR} />
+        </svg>
+        <div>
+          <div style={{ fontWeight: 900, fontSize: 44, color: GREEN }}>{p.benefits}</div>
+          <div style={{ fontWeight: 500, fontSize: 32, marginTop: 6, lineHeight: 1.25, color: "rgba(255,255,255,0.88)" }}>
+            {p.benefitsNote}
           </div>
         </div>
-      )}
+      </div>
 
       <div
         style={{
-          marginTop: 56,
+          marginTop: 40,
           background: BLUE,
           color: "white",
           fontWeight: 900,
-          fontSize: 64,
-          padding: "28px 64px",
+          fontSize: 62,
+          padding: "26px 64px",
           borderRadius: 999,
           transform: `scale(${btn * breathe})`,
           boxShadow: "0 18px 50px rgba(0,128,251,0.4)",
@@ -586,20 +640,20 @@ const Cta: React.FC<BreakingNewsProps> = (p) => {
 
       <div
         style={{
-          marginTop: 50,
+          marginTop: 34,
           textAlign: "center",
           color: NAVY,
           opacity: info,
           transform: `translateY(${interpolate(info, [0, 1], [30, 0])}px)`,
         }}
       >
-        <div style={{ fontWeight: 800, fontSize: 50 }}>{p.address}</div>
-        <div style={{ fontWeight: 500, fontSize: 34, color: "#4A5878", marginTop: 6 }}>{p.crossStreet}</div>
-        <div style={{ fontWeight: 600, fontSize: 40, marginTop: 22 }}>{p.doctorHours}</div>
-        <div style={{ fontWeight: 900, fontSize: 60, color: BLUE, marginTop: 22 }}>
-          {p.phone}
-          <span style={{ color: "#9AA6BF", fontWeight: 500 }}> · </span>
-          <span style={{ color: GREEN_DARK, fontSize: 48 }}>{p.website}</span>
+        <div style={{ fontWeight: 900, fontSize: 64, color: BLUE }}>{p.phone}</div>
+        <div style={{ fontWeight: 800, fontSize: 42, marginTop: 8 }}>{p.address}</div>
+        <div style={{ fontWeight: 600, fontSize: 32, color: "#4A5878", marginTop: 6 }}>
+          {p.appointments} · {p.website}
+        </div>
+        <div style={{ fontWeight: 500, fontSize: 24, color: "#7A86A0", marginTop: 22, padding: "0 90px", lineHeight: 1.3 }}>
+          *{p.finePrint}
         </div>
       </div>
     </AbsoluteFill>
