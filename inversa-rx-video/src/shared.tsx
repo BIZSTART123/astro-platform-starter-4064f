@@ -11,7 +11,7 @@ export const Ticker: React.FC<{
   bottom?: number;
   speed?: number;
   delay?: number;
-}> = ({ items, label = "OPTICAL", bottom = 150, speed = 7, delay = 8 }) => {
+}> = ({ items, label = "OPTICAL", bottom = 150, speed = 4, delay = 8 }) => {
   const frame = useCurrentFrame();
   const text = items.join("   •   ") + "   •   ";
   const x = -Math.max(0, frame - delay) * speed;

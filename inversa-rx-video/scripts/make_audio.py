@@ -136,7 +136,8 @@ END = 570
 sfx = Track(END)
 sfx.add(0.0, boom(1.4), 0.9)
 sfx.add(0.0, noise_hit(0.5, 0.15), 0.35)
-for s, ch in [(0.00, ["D3", "A3", "D4", "F4"]), (0.33, ["D3", "A3", "D4", "F4"]), (0.55, ["F3", "C4", "F4", "A4"]), (1.0, ["G3", "D4", "G4", "Bb4"])]:
+# news stabs in E major to sit with the jingle (jingle 1 is in E major)
+for s, ch in [(0.00, ["E3", "B3", "E4", "G#4"]), (0.33, ["E3", "B3", "E4", "G#4"]), (0.55, ["A3", "E4", "A4", "C#5"]), (1.0, ["B3", "F#4", "B4", "D#5"])]:
     sfx.add(s, chord([note(n) for n in ch], 0.9, "saw", r=0.35 if s < 1 else 0.8), 0.35)
 for k in range(6):
     sfx.add(f(165) + k * 0.06, noise_hit(0.05, 0.02), 0.25)
@@ -145,7 +146,7 @@ sfx.add(f(213), boom(1.6, 120), 1.0)
 sfx.add(f(213), noise_hit(0.8, 0.25), 0.3)
 sfx.add(f(255), sweep(0.4, 300, 1200, 0.1), 0.2)
 sfx.add(f(317), tone(note("E5"), 0.8, "sine", r=0.4), 0.18)  # soft "concern" chime
-for i, n in enumerate(["C6", "E6", "G6", "C7"]):
+for i, n in enumerate(["E6", "G#6", "B6", "E7"]):
     sfx.add(f(422) + i * 0.09, tone(note(n), 1.2, "sine", r=0.5), 0.12)
 sfx.save("public/audio/sfx-v1.wav")
 
@@ -167,8 +168,8 @@ for fr in [28, 68, 112, 174, 220, 278]:
     sfx.add(f(fr), pop(), 0.5)
 sfx.add(f(112), tone(note("A5"), 0.4, r=0.2), 0.12)  # the big question gets a little sparkle
 sfx.add(f(320), pop(), 0.45)
-sfx.add(f(320) + 0.06, tone(note("C6"), 0.3, r=0.15), 0.12)
-for i, n in enumerate(["C6", "E6", "G6", "C7"]):
+sfx.add(f(320) + 0.06, tone(note("D6"), 0.3, r=0.15), 0.12)
+for i, n in enumerate(["D6", "F#6", "A6", "D7"]):  # D major, like jingle 2
     sfx.add(f(374) + i * 0.09, tone(note(n), 1.2, r=0.5), 0.1)
 sfx.save("public/audio/sfx-v2.wav")
 
@@ -184,14 +185,14 @@ mus.save("public/audio/music-v2.wav", peak=0.8)
 END = 522
 sfx = Track(END)
 for i, fr in enumerate([20, 44, 68, 92, 116]):
-    sfx.add(f(fr), tone(note(["C5", "D5", "E5", "G5", "A5"][i]), 0.5, "keys", r=0.2), 0.3)
+    sfx.add(f(fr), tone(note(["E5", "F#5", "G#5", "B5", "C#6"][i]), 0.5, "keys", r=0.2), 0.3)
     sfx.add(f(fr), noise_hit(0.04, 0.01), 0.08)
 sfx.add(f(146), tone(note("E6"), 0.3, r=0.12), 0.15)
 sfx.add(f(170), sweep(f(222) - f(170), 120, 700, 0.15), 0.35)
 sfx.add(f(254), noise_hit(0.03, 0.006), 0.4)  # glasses "click"
-sfx.add(f(256), chord([note("C5"), note("E5"), note("G5")], 1.0, r=0.5), 0.2)
+sfx.add(f(256), chord([note("E5"), note("G#5"), note("B5")], 1.0, r=0.5), 0.2)
 sfx.add(f(268), sweep(0.4, 300, 1200, 0.1), 0.2)
-for i, n in enumerate(["C6", "E6", "G6", "C7"]):
+for i, n in enumerate(["E6", "G#6", "B6", "E7"]):  # E major, like jingle 1
     sfx.add(f(374) + i * 0.09, tone(note(n), 1.2, r=0.5), 0.1)
 sfx.save("public/audio/sfx-v3.wav")
 
