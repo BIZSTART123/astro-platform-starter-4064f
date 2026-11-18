@@ -12,7 +12,7 @@ const MESSAGES: Msg[] = [
   { at: 52, text: "Quick question… and be honest 👀" },
   { at: 96, text: "When was the last time you REALLY checked your eyes?", big: true },
   { at: 158, text: "Squinting at your phone doesn't count 😅" },
-  { at: 204, text: "Headaches? Blurry signs at night? Holding the menu farther away?" },
+  { at: 204, text: "Also… are your glasses older than your phone? 📱👓" },
   { at: 262, text: "Not being dramatic. I'm genuinely concerned about you ❤️" },
   { at: 320, text: "ok ok… I'll stop in 🙈", me: true },
 ];
