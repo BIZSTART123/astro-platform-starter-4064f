@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Img, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { BLUE, BrandProps, FONT, GREEN, NAVY, SKY, defaultBrandProps, opticalTickerItems } from "./brand";
+import { BLUE, BrandProps, FONT, GREEN, NAVY, SKY, withJingle, opticalTickerItems } from "./brand";
 import { EndCard, Soundtrack, Ticker } from "./shared";
 
 /* Version 2: "Concerned Friend". A text thread from Inversa Rx that checks in on you. */
@@ -22,7 +22,7 @@ const END = 522;
 export const CONCERNED_DURATION = END;
 
 export type ConcernedProps = BrandProps;
-export const defaultConcernedProps: ConcernedProps = defaultBrandProps;
+export const defaultConcernedProps: ConcernedProps = withJingle(4.5);
 
 // Rough height of a bubble, used to scroll the thread as it fills.
 const bubbleHeight = (m: Msg) => {

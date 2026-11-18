@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Easing, Img, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { BLUE, BrandProps, FONT, GREEN, NAVY, RED, clamp, defaultBrandProps, opticalTickerItems } from "./brand";
+import { BLUE, BrandProps, FONT, GREEN, NAVY, RED, clamp, withJingle, opticalTickerItems } from "./brand";
 import { EndCard, Soundtrack, Ticker } from "./shared";
 
 /* Version 3: "Eye Chart". An eye chart that asks the question, then a tiny line that matters. */
@@ -23,7 +23,7 @@ export const EYECHART_DURATION = END;
 export const EYECHART_SFX_FRAMES = [...LINES.map((l) => l.at), TINY.at, ZOOM_START, FOCUS_END - 8, CARE];
 
 export type EyeChartProps = BrandProps;
-export const defaultEyeChartProps: EyeChartProps = defaultBrandProps;
+export const defaultEyeChartProps: EyeChartProps = withJingle(24.0);
 
 const Chart: React.FC = () => {
   const frame = useCurrentFrame();

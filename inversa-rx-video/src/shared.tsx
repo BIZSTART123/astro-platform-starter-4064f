@@ -222,7 +222,7 @@ export const Soundtrack: React.FC<{ id: string; p: BrandProps; durationInFrames:
   const fadeOut = 20;
   return (
     <>
-      <Audio src={staticFile(`audio/sfx-${id}.wav`)} />
+      <Audio src={staticFile(`audio/sfx-${id}.wav`)} volume={p.sfxVolume} />
       <Audio
         src={musicSrc}
         trimBefore={p.music ? Math.round(p.musicStartSeconds * 30) : undefined}

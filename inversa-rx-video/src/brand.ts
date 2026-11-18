@@ -45,6 +45,7 @@ export type BrandProps = {
   /** Skip into the Suno track, e.g. 12 to start at its hook instead of its intro. */
   musicStartSeconds: number;
   musicVolume: number;
+  sfxVolume: number;
   withAudio: boolean;
 };
 
@@ -69,6 +70,7 @@ export const defaultBrandProps: BrandProps = {
   music: "",
   musicStartSeconds: 0,
   musicVolume: 0.55,
+  sfxVolume: 1,
   withAudio: true,
 };
 
@@ -90,3 +92,16 @@ export const opticalTickerItems = (p: BrandProps, extras: string[]) => {
   }
   return out;
 };
+
+/**
+ * The Inversa Rx jingle, cued per version so the sung lines land on the matching visuals.
+ * Lyric timings in the song: verse "when's the last time you really checked your eyes" 6.5s,
+ * chorus "Inversa Rx… better vision, better life" 24.0s.
+ */
+export const withJingle = (startSeconds: number): BrandProps => ({
+  ...defaultBrandProps,
+  music: "inversa-rx-jingle.mp3",
+  musicStartSeconds: startSeconds,
+  musicVolume: 0.95,
+  sfxVolume: 0.45,
+});

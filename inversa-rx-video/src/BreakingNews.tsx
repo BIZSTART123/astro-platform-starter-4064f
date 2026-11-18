@@ -10,7 +10,7 @@ import {
   RED,
   RED_DARK,
   clamp,
-  defaultBrandProps,
+  withJingle,
   opticalTickerItems,
 } from "./brand";
 import { EndCard, Soundtrack, Ticker } from "./shared";
@@ -18,7 +18,7 @@ import { EndCard, Soundtrack, Ticker } from "./shared";
 /* Version 1: "Breaking News". A fake news report finds the missing person: YOU. */
 
 export type BreakingNewsProps = BrandProps;
-export const defaultBreakingNewsProps: BreakingNewsProps = defaultBrandProps;
+export const defaultBreakingNewsProps: BreakingNewsProps = withJingle(0);
 
 const T = {
   open: 0, // BREAKING NEWS slam
