@@ -1,0 +1,55 @@
+---
+import '../styles/global.css';
+import { BIZ } from '../config';
+
+interface Props { title?: string; description?: string }
+const {
+  title = `${BIZ.optical} | Affordable eye care in ${BIZ.neighborhood}`,
+  description = `Eye exams by an ophthalmologist, glasses and contact lenses for every budget, plus a neighbourhood pharmacy. Exams are free with the purchase of glasses.`,
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Optician',
+  name: BIZ.optical,
+  description,
+  url: Astro.site?.toString(),
+  areaServed: BIZ.neighborhood,
+  ...(BIZ.address && { address: BIZ.address }),
+  ...(BIZ.phone && { telephone: BIZ.phone }),
+};
+---
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0e1a2b" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <script is:inline>document.documentElement.classList.remove('no-js')</script>
+  </head>
+  <body>
+    <slot />
+    <script>
+      const io = new IntersectionObserver(
+        (entries) => entries.forEach((e) => e.isIntersecting && (e.target.classList.add('in'), io.unobserve(e.target))),
+        { threshold: 0.15 }
+      );
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>
