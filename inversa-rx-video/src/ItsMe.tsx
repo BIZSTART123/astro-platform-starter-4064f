@@ -14,13 +14,12 @@ import {
 import { BrandProps, FONT, GREEN, clamp, opticalTickerItems, withJingle } from "./brand";
 import { EndCard, Soundtrack, Ticker } from "./shared";
 
-/* Version 5: "It's Me". Your own selfie, talking to the viewer in first-person captions. */
+/* Version 5: "Good Morning". Your photos, an early-morning check-in in first-person captions. */
 
 export type ItsMeProps = BrandProps & {
   /** Your photos in public/ (git-ignored, they stay on this machine). */
-  photo: string; // car selfie: "hey it's me" + the eye zoom (also the thumbnail)
   photoCoffee: string; // "I was literally just thinking about you"
-  photoSmile: string; // "'cause I care about you"
+  photoSmile: string; // opener (thumbnail) + the squint gag
   photoGlasses: string; // come see me at Inversa Rx Optical
   /**
    * Optional: a real selfie video or a Runway clip in public/ (e.g. "me-runway.mp4").
@@ -35,7 +34,6 @@ export type ItsMeProps = BrandProps & {
 // lands on the matching caption, and "come down White Plains Road" on "come see me".
 export const defaultItsMeProps: ItsMeProps = {
   ...withJingle(0.7),
-  photo: "me-selfie.jpg",
   photoCoffee: "me-coffee.jpg",
   photoSmile: "me-smile.jpg",
   photoGlasses: "me-glasses.jpg",
@@ -43,24 +41,24 @@ export const defaultItsMeProps: ItsMeProps = {
   name: "",
 };
 
-type Cap = { from: number; to: number; text: React.ReactNode; accent?: boolean };
+type Cap = { from: number; to: number; text: React.ReactNode; accent?: boolean; squint?: boolean };
 // Written to one person, never to "everyone": it's a blast that feels like a 1-on-1.
 const captions = (name: string): Cap[] => [
   // visible on frame 0 = the WhatsApp thumbnail
-  { from: -14, to: 72, text: name ? <>Hey {name}… it's me 👋</> : <>Hey… it's me 👋</> },
-  { from: 76, to: 160, text: <>I was literally just<br />thinking about you 🙏🏾</> },
+  { from: -14, to: 72, text: name ? <>Good morning {name} ☀️<br />it's me 👋</> : <>Good morning ☀️<br />it's me 👋</> },
+  { from: 76, to: 160, text: <>Coffee's hot ☕<br />and I got a question for you…</> },
   {
     from: 166,
     to: 268,
     accent: true,
     text: (
       <>
-        Real talk… when's the last time you <span style={{ color: GREEN }}>REALLY</span> checked your eyes? 👀
+        When's the last time you <span style={{ color: GREEN }}>REALLY</span> checked your eyes? 👀
       </>
     ),
   },
-  { from: 272, to: 358, text: <>I'm only asking<br />'cause I care about you ❤️</> },
-  { from: 362, to: 438, text: <>Come see me at<br /><span style={{ color: "#7CC4FF" }}>Inversa Rx Optical</span>. I got you 👓</> },
+  { from: 272, to: 358, squint: true, text: <>Be honest… are you<br />squinting at this right now? 😂</> },
+  { from: 362, to: 438, text: <>Start your day right.<br />Come see me at <span style={{ color: "#7CC4FF" }}>Inversa Rx Optical</span> 👓</> },
 ];
 const CTA = 440;
 const END = 590;
@@ -81,8 +79,11 @@ const Caption: React.FC<{ c: Cap }> = ({ c }) => {
         right: 60,
         top: c.accent ? 1060 : 1180,
         textAlign: "center",
-        opacity: pop * out,
-        transform: `scale(${interpolate(pop, [0, 1], [0.8, 1])})`,
+        opacity: (c.squint ? 1 : pop) * out,
+        transform: c.squint
+          ? `scale(${interpolate(local, [0, 34, 42], [0.32, 0.32, 1], clamp)})`
+          : `scale(${interpolate(pop, [0, 1], [0.8, 1])})`,
+        filter: c.squint ? `blur(${interpolate(local, [0, 34, 42], [5, 5, 0], clamp)}px)` : undefined,
       }}
     >
       <span
@@ -162,11 +163,11 @@ const Selfie: React.FC<{ p: ItsMeProps }> = ({ p }) => {
   const care = interpolate(frame, [272, 300, 352, 362], [0, 1, 1, 0], clamp);
   // Each shot runs a few frames past the next one's start so the cuts crossfade.
   const shots: Shot[] = [
-    { src: p.photo, from: -999, to: 76 + FADE, focus: "47% 49%", zoom: [1.04, 1.08] },
+    { src: p.photoSmile, from: -999, to: 76 + FADE, focus: "50% 24%", zoom: [1.45, 1.55], portrait: true, mask: "50% 40%" },
     { src: p.photoCoffee, from: 72, to: 166 + FADE, focus: "60% 38%", zoom: [1.14, 1.24] },
-    { src: p.photo, from: 162, to: 272 + FADE, focus: "47% 49%", zoom: [1.08, 1.7], eased: true },
-    { src: p.photoSmile, from: 268, to: 362 + FADE, focus: "50% 24%", zoom: [1.5, 1.62], portrait: true, mask: "50% 40%" },
-    { src: p.photoGlasses, from: 358, to: CTA, focus: "50% 44%", zoom: [1.22, 1.32] },
+    { src: p.photoGlasses, from: 162, to: 272 + FADE, focus: "50% 39%", zoom: [1.3, 2.2], eased: true }, // into the eyes, behind the frames
+    { src: p.photoSmile, from: 268, to: 362 + FADE, focus: "50% 24%", zoom: [1.6, 1.72], portrait: true, mask: "50% 40%" },
+    { src: p.photoGlasses, from: 358, to: CTA, focus: "50% 44%", zoom: [1.5, 1.22], eased: true }, // pull back to the full look
   ];
   return (
     <AbsoluteFill style={{ background: "black" }}>
@@ -177,6 +178,14 @@ const Selfie: React.FC<{ p: ItsMeProps }> = ({ p }) => {
       ) : (
         shots.map((s) => <ShotView key={`${s.src}-${s.from}`} shot={s} />)
       )}
+      {/* morning sunlight over the opening */}
+      <AbsoluteFill
+        style={{
+          background: "radial-gradient(80% 60% at 85% 5%, rgba(255,196,120,0.55) 0%, rgba(255,170,90,0.18) 45%, transparent 75%)",
+          opacity: interpolate(frame, [0, 150, 175], [1, 1, 0], clamp),
+          mixBlendMode: "screen",
+        }}
+      />
       {/* warm, slightly darker grade when it gets real */}
       <AbsoluteFill style={{ background: "radial-gradient(70% 55% at 50% 45%, transparent 40%, rgba(20,10,40,0.6) 100%)", opacity: 0.5 + care * 0.3 }} />
       {/* soft bottom shade so captions and the ticker read */}
@@ -210,7 +219,7 @@ const LogoPop: React.FC = () => {
 };
 
 export const ItsMe: React.FC<ItsMeProps> = (props) => {
-  const items = opticalTickerItems(props, [`COME SEE ME`, `I GOT YOU`, `WHEN DID YOU LAST CHECK YOUR EYES?`]);
+  const items = opticalTickerItems(props, [`GOOD MORNING FROM INVERSA RX OPTICAL ☀️`, `COFFEE FIRST, THEN YOUR EYES ☕`, `SQUINTING IS NOT A MORNING ROUTINE`]);
   return (
     <AbsoluteFill style={{ background: "black", fontFamily: FONT }}>
       <Sequence durationInFrames={CTA} layout="none">
@@ -227,7 +236,7 @@ export const ItsMe: React.FC<ItsMeProps> = (props) => {
         </Sequence>
       </Sequence>
       <Sequence from={CTA} durationInFrames={END - CTA}>
-        <EndCard {...props} kicker="I'll take care of you myself. Come through 👓" />
+        <EndCard {...props} kicker="Rise and shine ☀️ I got you 👓" />
       </Sequence>
       <Soundtrack id="v5" p={props} durationInFrames={END} />
     </AbsoluteFill>
