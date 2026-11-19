@@ -25,3 +25,18 @@ a quick walk-through of the frame wall. Send them over and I'll fit them in.
 
 Any scene you skip uses your photo instead, so you can film just one or two to start.
 Your clips stay on your machine; they are never uploaded to GitHub.
+
+---
+
+# Shot list: "Clear Vision Jutsu" (V6, the hand-sign trend)
+
+Three clips, vertical, at the shop. Energy up, this one is pure fun.
+
+| # | Clip | What you do | Length |
+|---|---|---|---|
+| 1 | Setup | No glasses. Hold a menu or your phone at arm's length and squint hard at it, then look at the camera, unimpressed 😑 | 2–3 s |
+| 2 | Hand signs | Fast, dramatic hand signs right at the camera, like you're charging up a power move. Six quick ones, big arm movements, serious face | 3 s |
+| 3 | Reveal | Start with your hands covering your face, drop them: you're wearing glasses, big smile, push the frames up with one finger, point at the camera | 3–4 s |
+
+Name them `1-squint.mov`, `2-signs.mov`, `3-reveal.mov` and put them in `clips-inbox/jutsu/`.
+The video adds the speed lines, "charging" meter, smoke poof, sparkles and the HD effect.

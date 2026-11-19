@@ -235,3 +235,24 @@ sfx.save("public/audio/sfx-v5.wav")
 mus = Track(END)
 progression(mus, 0.0, f(END), [["E3", "G#3", "B3"], ["C#3", "E3", "G#3"], ["A2", "C#3", "E3"], ["B2", "D#3", "F#3"]], 1.8, r=1.4)
 mus.save("public/audio/music-v5.wav", peak=0.8)
+
+# ---------------- v6: Clear Vision Jutsu (512 frames, jingle 1 in E major) ----------------
+END = 512
+sfx = Track(END)
+for i, fr in enumerate([84, 98, 112, 126, 140, 152]):  # hand signs: whoosh + hit, rising
+    sfx.add(f(fr) - 0.06, sweep(0.12, 400 + i * 120, 1800 + i * 200, 0.5), 0.35)
+    sfx.add(f(fr), noise_hit(0.06, 0.02), 0.3)
+    sfx.add(f(fr), tone(note(["E5", "F#5", "G#5", "B5", "C#6", "E6"][i]), 0.18, "square", r=0.08), 0.1)
+sfx.add(f(78), sweep(f(168) - f(78), 120, 900, 0.2), 0.22)  # charging riser
+sfx.add(f(168), boom(1.6, 110), 1.0)  # poof
+sfx.add(f(168), noise_hit(1.0, 0.35), 0.45)
+for i, n in enumerate(["E6", "G#6", "B6", "E7"]):  # reveal sparkle
+    sfx.add(f(188) + i * 0.07, tone(note(n), 1.0, r=0.4), 0.14)
+for i, n in enumerate(["E6", "G#6", "B6", "E7"]):
+    sfx.add(f(364) + i * 0.09, tone(note(n), 1.2, r=0.5), 0.1)
+sfx.save("public/audio/sfx-v6.wav")
+
+mus = Track(END)
+progression(mus, 0.0, f(END), [["E3", "G#3", "B3"], ["A2", "C#3", "E3"], ["B2", "D#3", "F#3"], ["C#3", "E3", "G#3"]], 1.6, r=1.2)
+drums(mus, 0.0, f(END), 100, 0.3)
+mus.save("public/audio/music-v6.wav", peak=0.8)
