@@ -38,8 +38,12 @@ distort faces. Re-roll a clip if your face changes; it should still look exactly
 
 A real selfie video beats any AI. Sit in the car like in the photo, phone vertical, and say:
 
-> "Hey… it's me. Real quick, I gotta ask you something. When's the last time you *really*
-> checked your eyes? I'm not playing, I'm concerned about you. Come see me at Inversa Rx Optical."
+> "Hey… it's me. I was literally just thinking about you. Real talk, when's the last time you
+> *really* checked your eyes? I'm only asking 'cause I care about you. Come see me at Inversa Rx
+> Optical. I got you."
+
+Look straight into the lens the whole time, as if it's one person. Say "you", never "y'all"
+or "everybody", and it'll feel like a 1-on-1 even when it goes out as a blast.
 
 About 12–14 seconds. Send it over and I'll put the captions, ticker, jingle and end card on it.
 

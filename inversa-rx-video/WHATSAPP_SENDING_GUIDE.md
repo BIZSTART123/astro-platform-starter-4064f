@@ -25,6 +25,12 @@ The goal: in the chat list and the chat, this looks like *you* checking in. The 
 - `Hey! It's been too long 🙏🏾`
 - `Thinking about you, how you been? ❤️`
 
+### Make a blast feel 1-on-1
+- Write every caption to **one** person: "you", never "y'all", "everyone" or "my contacts".
+- For your closest people, send the **named V5** ("Hey Marcus… it's me 👋") one by one instead
+  of in the broadcast: put first names in `names.txt` and run `npm run render:names`.
+- Reply to each response yourself, by name. That's what makes it real.
+
 Keep it to one short line, like a normal text. No links, prices or "special offer" in the
 caption: that's what makes a message look like an ad before it's opened.
 

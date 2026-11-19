@@ -24,6 +24,8 @@ export type ItsMeProps = BrandProps & {
    * When set, it plays instead of the still photo.
    */
   selfieVideo: string;
+  /** Optional first name, e.g. "Marcus". Empty = generic version for the blast. */
+  name: string;
 };
 
 // Jingle 1 from 0.7s: "when's the last time you really checked your eyes" (6.5s in the song)
@@ -32,24 +34,27 @@ export const defaultItsMeProps: ItsMeProps = {
   ...withJingle(0.7),
   photo: "me-selfie.jpg",
   selfieVideo: "",
+  name: "",
 };
 
 type Cap = { from: number; to: number; text: React.ReactNode; accent?: boolean };
-const CAPTIONS: Cap[] = [
-  { from: -14, to: 72, text: <>Hey… it's me 👋</> }, // visible on frame 0 = WhatsApp thumbnail
-  { from: 76, to: 160, text: <>Real quick…<br />I gotta ask you something</> },
+// Written to one person, never to "everyone": it's a blast that feels like a 1-on-1.
+const captions = (name: string): Cap[] => [
+  // visible on frame 0 = the WhatsApp thumbnail
+  { from: -14, to: 72, text: name ? <>Hey {name}… it's me 👋</> : <>Hey… it's me 👋</> },
+  { from: 76, to: 160, text: <>I was literally just<br />thinking about you 🙏🏾</> },
   {
     from: 166,
     to: 268,
     accent: true,
     text: (
       <>
-        When's the last time you <span style={{ color: GREEN }}>REALLY</span> checked your eyes? 👀
+        Real talk… when's the last time you <span style={{ color: GREEN }}>REALLY</span> checked your eyes? 👀
       </>
     ),
   },
-  { from: 272, to: 358, text: <>I'm not playing…<br />I'm concerned about you ❤️</> },
-  { from: 362, to: 438, text: <>Come see me at<br /><span style={{ color: "#7CC4FF" }}>Inversa Rx Optical</span> 👓</> },
+  { from: 272, to: 358, text: <>I'm only asking<br />'cause I care about you ❤️</> },
+  { from: 362, to: 438, text: <>Come see me at<br /><span style={{ color: "#7CC4FF" }}>Inversa Rx Optical</span>. I got you 👓</> },
 ];
 const CTA = 440;
 const END = 590;
@@ -151,24 +156,24 @@ const LogoPop: React.FC = () => {
 };
 
 export const ItsMe: React.FC<ItsMeProps> = (props) => {
-  const items = opticalTickerItems(props, [`IT'S ME, CHECKING ON YOU`, `WHEN DID YOU LAST CHECK YOUR EYES?`, `COME SEE ME`]);
+  const items = opticalTickerItems(props, [`COME SEE ME`, `I GOT YOU`, `WHEN DID YOU LAST CHECK YOUR EYES?`]);
   return (
     <AbsoluteFill style={{ background: "black", fontFamily: FONT }}>
       <Sequence durationInFrames={CTA} layout="none">
         <Selfie photo={props.photo} selfieVideo={props.selfieVideo} />
-        {CAPTIONS.map((c) => (
+        {captions(props.name).map((c) => (
           <Caption key={c.from} c={c} />
         ))}
         <Sequence from={362} layout="none">
           <LogoPop />
         </Sequence>
-        {/* kept off the first frames so the WhatsApp thumbnail is just you */}
-        <Sequence from={24} layout="none">
+        {/* the info ticker waits until after the big question, so the opening is just you talking */}
+        <Sequence from={276} layout="none">
           <Ticker items={items} bottom={120} delay={0} />
         </Sequence>
       </Sequence>
       <Sequence from={CTA} durationInFrames={END - CTA}>
-        <EndCard {...props} kicker="I'll take care of you. Come through 👓" />
+        <EndCard {...props} kicker="I'll take care of you myself. Come through 👓" />
       </Sequence>
       <Soundtrack id="v5" p={props} durationInFrames={END} />
     </AbsoluteFill>
