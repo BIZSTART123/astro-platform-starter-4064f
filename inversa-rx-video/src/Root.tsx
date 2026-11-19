@@ -5,6 +5,7 @@ import { BREAKING_NEWS_DURATION, BreakingNews, defaultBreakingNewsProps } from "
 import { CONCERNED_DURATION, Concerned, defaultConcernedProps } from "./Concerned";
 import { EYECHART_DURATION, EyeChart, defaultEyeChartProps } from "./EyeChart";
 import { GROUPCHAT_DURATION, GroupChat, defaultGroupChatProps } from "./GroupChat";
+import { ITSME_DURATION, ItsMe, defaultItsMeProps } from "./ItsMe";
 import { OPEN, withOpener } from "./Opener";
 
 // Each video opens on a personal check-in frame, which WhatsApp shows as the thumbnail.
@@ -51,6 +52,16 @@ export const RemotionRoot: React.FC = () => (
       fps={FPS}
       durationInFrames={OPEN + GROUPCHAT_DURATION}
       defaultProps={defaultGroupChatProps}
+    />
+    {/* V5 opens on your own selfie, which makes the most personal thumbnail of all */}
+    <Composition
+      id="V5-ItsMe"
+      component={ItsMe}
+      width={1080}
+      height={1920}
+      fps={FPS}
+      durationInFrames={ITSME_DURATION}
+      defaultProps={defaultItsMeProps}
     />
   </>
 );

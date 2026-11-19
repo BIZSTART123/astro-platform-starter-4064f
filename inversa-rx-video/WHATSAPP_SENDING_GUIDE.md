@@ -21,6 +21,10 @@ The goal: in the chat list and the chat, this looks like *you* checking in. The 
 - `Bro 😂😂 the boys had to say something`
 - `Yo… this you? 💀`
 
+**V5: It's Me** (thumbnail: your selfie + "Hey… it's me 👋"), the most personal one
+- `Hey! It's been too long 🙏🏾`
+- `Thinking about you, how you been? ❤️`
+
 Keep it to one short line, like a normal text. No links, prices or "special offer" in the
 caption: that's what makes a message look like an ad before it's opened.
 

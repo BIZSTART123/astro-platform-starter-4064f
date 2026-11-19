@@ -220,3 +220,18 @@ bar = 60 / 90 * 4
 progression(mus, 0.0, f(END), [["D3", "F#3", "A3", "C#4"], ["B2", "D3", "F#3", "A3"], ["G2", "B2", "D3", "F#3"], ["A2", "C#3", "E3", "G3"]], bar, r=1.4)
 drums(mus, 0.0, f(END), 90, 0.32)
 mus.save("public/audio/music-v4.wav", peak=0.8)
+
+# ---------------- v5: It's Me (590 frames, jingle 1 in E major) ----------------
+END = 590
+sfx = Track(END)
+for fr in [80, 170, 276, 366]:
+    sfx.add(f(fr), pop(), 0.35)
+sfx.add(f(170), sweep(0.5, 200, 900, 0.08), 0.15)  # push toward the eyes
+sfx.add(f(366), tone(note("B5"), 0.4, r=0.2), 0.12)
+for i, n in enumerate(["E6", "G#6", "B6", "E7"]):
+    sfx.add(f(442) + i * 0.09, tone(note(n), 1.2, r=0.5), 0.1)
+sfx.save("public/audio/sfx-v5.wav")
+
+mus = Track(END)
+progression(mus, 0.0, f(END), [["E3", "G#3", "B3"], ["C#3", "E3", "G#3"], ["A2", "C#3", "E3"], ["B2", "D#3", "F#3"]], 1.8, r=1.4)
+mus.save("public/audio/music-v5.wav", peak=0.8)

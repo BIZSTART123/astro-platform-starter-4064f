@@ -1,2 +1,5 @@
 node_modules
 out
+
+# personal photos/clips stay local (not pushed to GitHub)
+public/me-*

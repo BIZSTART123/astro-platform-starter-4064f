@@ -20,7 +20,8 @@
     "render:v1": "remotion render V1-BreakingNews out/InversaRx-Optical-V1-BreakingNews.mp4 --codec h264 --crf 20",
     "render:v2": "remotion render V2-ConcernedFriend out/InversaRx-Optical-V2-ConcernedFriend.mp4 --codec h264 --crf 20",
     "render:v3": "remotion render V3-EyeChart out/InversaRx-Optical-V3-EyeChart.mp4 --codec h264 --crf 20",
-    "render": "npm run render:v1 && npm run render:v2 && npm run render:v3 && npm run render:v4",
-    "render:v4": "remotion render V4-TheBoys out/InversaRx-Optical-V4-TheBoys.mp4 --codec h264 --crf 20"
+    "render": "npm run render:v1 && npm run render:v2 && npm run render:v3 && npm run render:v4 && npm run render:v5",
+    "render:v4": "remotion render V4-TheBoys out/InversaRx-Optical-V4-TheBoys.mp4 --codec h264 --crf 20",
+    "render:v5": "remotion render V5-ItsMe out/InversaRx-Optical-V5-ItsMe.mp4 --codec h264 --crf 20"
   }
 }
