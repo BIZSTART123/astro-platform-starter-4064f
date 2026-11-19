@@ -26,6 +26,12 @@ export type ItsMeProps = BrandProps & {
    * When set, it plays instead of the still photo.
    */
   selfieVideo: string;
+  /**
+   * Optional action clips, one per scene, in public/clips/ (see SHOT_LIST.md).
+   * A scene with a clip plays the clip; a scene without one falls back to its photo.
+   * scripts/build_all.sh fills this in automatically from whatever clips it finds.
+   */
+  clips: string[];
   /** Optional first name, e.g. "Marcus". Empty = generic version for the blast. */
   name: string;
 };
@@ -38,6 +44,7 @@ export const defaultItsMeProps: ItsMeProps = {
   photoSmile: "me-smile.jpg",
   photoGlasses: "me-glasses.jpg",
   selfieVideo: "",
+  clips: ["", "", "", "", ""],
   name: "",
 };
 
@@ -120,6 +127,8 @@ type Shot = {
   portrait?: boolean;
   /** centre of the sharp area for portrait mode (defaults to focus) */
   mask?: string;
+  /** an action clip in public/ that replaces the photo for this scene */
+  clip?: string;
 };
 
 const FADE = 8;
@@ -135,6 +144,17 @@ const ShotView: React.FC<{ shot: Shot }> = ({ shot }) => {
   const fade = shot.from <= 0 ? 1 : interpolate(frame, [shot.from, shot.from + FADE], [0, 1], clamp);
   const drift = Math.sin(frame / 40) * 6;
   const img: React.CSSProperties = { width: "100%", height: "100%", objectFit: "cover", objectPosition: shot.focus };
+  if (shot.clip) {
+    return (
+      <AbsoluteFill style={{ opacity: fade }}>
+        <Sequence from={Math.max(0, shot.from)} layout="none">
+          <AbsoluteFill style={{ transform: `scale(${interpolate(p, [0, 1], [1.0, 1.06])})` }}>
+            <OffthreadVideo src={staticFile(shot.clip)} muted style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          </AbsoluteFill>
+        </Sequence>
+      </AbsoluteFill>
+    );
+  }
   return (
     <AbsoluteFill style={{ opacity: fade }}>
       <AbsoluteFill style={{ transformOrigin: shot.focus, transform: `translate(${drift}px, ${drift * 0.6}px) scale(${scale})` }}>
@@ -162,13 +182,14 @@ const Selfie: React.FC<{ p: ItsMeProps }> = ({ p }) => {
   const frame = useCurrentFrame();
   const care = interpolate(frame, [272, 300, 352, 362], [0, 1, 1, 0], clamp);
   // Each shot runs a few frames past the next one's start so the cuts crossfade.
-  const shots: Shot[] = [
+  const base: Shot[] = [
     { src: p.photoSmile, from: -999, to: 76 + FADE, focus: "50% 24%", zoom: [1.45, 1.55], portrait: true, mask: "50% 40%" },
     { src: p.photoCoffee, from: 72, to: 166 + FADE, focus: "60% 38%", zoom: [1.14, 1.24] },
     { src: p.photoGlasses, from: 162, to: 272 + FADE, focus: "50% 39%", zoom: [1.3, 2.2], eased: true }, // into the eyes, behind the frames
     { src: p.photoSmile, from: 268, to: 362 + FADE, focus: "50% 24%", zoom: [1.6, 1.72], portrait: true, mask: "50% 40%" },
     { src: p.photoGlasses, from: 358, to: CTA, focus: "50% 44%", zoom: [1.5, 1.22], eased: true }, // pull back to the full look
   ];
+  const shots: Shot[] = base.map((s, i) => (p.clips?.[i] ? { ...s, clip: p.clips[i] } : s));
   return (
     <AbsoluteFill style={{ background: "black" }}>
       {p.selfieVideo ? (

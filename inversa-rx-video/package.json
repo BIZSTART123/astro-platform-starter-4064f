@@ -23,6 +23,9 @@
     "render": "npm run render:v1 && npm run render:v2 && npm run render:v3 && npm run render:v4 && npm run render:v5",
     "render:v4": "remotion render V4-TheBoys out/InversaRx-Optical-V4-TheBoys.mp4 --codec h264 --crf 20",
     "render:v5": "remotion render V5-ItsMe out/InversaRx-Optical-V5-ItsMe.mp4 --codec h264 --crf 20",
-    "render:names": "bash scripts/render_names.sh"
+    "render:names": "bash scripts/render_names.sh",
+    "build:all": "bash scripts/build_all.sh",
+    "send:dry": "python3 scripts/whatsapp_send.py",
+    "send": "python3 scripts/whatsapp_send.py --send"
   }
 }

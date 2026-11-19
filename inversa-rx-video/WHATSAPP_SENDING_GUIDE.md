@@ -60,3 +60,18 @@ WhatsApp restricts numbers when lots of people block or report them.
 It works *because* it's real: it's you, from your number, and the video itself says you're
 checking on them. Avoid captions that would make it feel like a trick once they open it
 (e.g. "urgent", "emergency", "did you see this about you?"). Playful and friendly lands best.
+
+## Automation
+
+**Make everything (one command):** `npm run build:all` in `inversa-rx-video/`. It picks up any
+action clips in `clips-inbox/` (see `SHOT_LIST.md`), renders all five videos and writes the
+morning captions to `out/ready/CAPTIONS.txt`.
+
+**Sending, the free way:** WhatsApp Business app → broadcast lists, at 7:00–8:30 AM. You tap send;
+everything before that is done for you.
+
+**Sending, fully automated:** `scripts/whatsapp_send.py` sends through the official WhatsApp
+Business Platform (Twilio) on a schedule. It needs a Twilio WhatsApp sender, an approved
+template with the video, and **contacts who opted in** (`contacts.csv`, never committed).
+Dry run first: `npm run send:dry`. Don't automate a personal WhatsApp number with bots or
+"blast" apps: that breaks WhatsApp's rules and the number gets banned.

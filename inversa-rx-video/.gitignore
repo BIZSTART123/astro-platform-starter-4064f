@@ -4,3 +4,6 @@ out
 # personal photos/clips stay local (not pushed to GitHub)
 public/me-*
 names.txt
+clips-inbox/
+public/clips/
+contacts.csv
