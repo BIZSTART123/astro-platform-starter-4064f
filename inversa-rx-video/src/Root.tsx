@@ -6,6 +6,7 @@ import { CONCERNED_DURATION, Concerned, defaultConcernedProps } from "./Concerne
 import { EYECHART_DURATION, EyeChart, defaultEyeChartProps } from "./EyeChart";
 import { GROUPCHAT_DURATION, GroupChat, defaultGroupChatProps } from "./GroupChat";
 import { ITSME_DURATION, ItsMe, defaultItsMeProps } from "./ItsMe";
+import { JUTSU_DURATION, Jutsu, defaultJutsuProps } from "./Jutsu";
 import { OPEN, withOpener } from "./Opener";
 
 // Each video opens on a personal check-in frame, which WhatsApp shows as the thumbnail.
@@ -62,6 +63,15 @@ export const RemotionRoot: React.FC = () => (
       fps={FPS}
       durationInFrames={ITSME_DURATION}
       defaultProps={defaultItsMeProps}
+    />
+    <Composition
+      id="V6-Jutsu"
+      component={Jutsu}
+      width={1080}
+      height={1920}
+      fps={FPS}
+      durationInFrames={JUTSU_DURATION}
+      defaultProps={defaultJutsuProps}
     />
   </>
 );

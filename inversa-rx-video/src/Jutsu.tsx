@@ -27,7 +27,7 @@ export type JutsuProps = BrandProps & {
 // Jingle 1 from 22.3s: the chorus kicks in at 1.7s and "we'll get your eyes right" lands on the reveal.
 export const defaultJutsuProps: JutsuProps = {
   ...withJingle(22.3),
-  photoBefore: "me-smile.jpg",
+  photoBefore: "me-coffee.jpg",
   photoAfter: "me-glasses.jpg",
   clips: ["", "", ""],
 };
@@ -188,8 +188,8 @@ export const Jutsu: React.FC<JutsuProps> = (props) => {
               photo={props.photoBefore}
               clip={frame < T.signs ? clipSetup : clipSigns}
               from={frame < T.signs ? 0 : T.signs}
-              focus="50% 26%"
-              scale={1.5 + kick * 0.08 + charge * 0.25}
+              focus="60% 30%"
+              scale={1.25 + kick * 0.08 + charge * 0.25}
               // squinty, slightly blurry "before"
               blur={clipSigns && frame >= T.signs ? 0 : 1.5}
             />
@@ -259,14 +259,14 @@ export const Jutsu: React.FC<JutsuProps> = (props) => {
               );
             })()}
           </div>
-          <Caption at={T.reveal + 30} top={1240}>
+          <Caption at={30} top={1240}>
             Blurry → HD in one visit 😎
           </Caption>
         </Sequence>
 
         {/* your turn */}
         <Sequence from={T.turn} durationInFrames={T.cta - T.turn} layout="none">
-          <Caption at={T.turn} big top={1100}>
+          <Caption at={0} big top={1100}>
             Your turn 👀
             <br />
             Come see me at <span style={{ color: "#7CC4FF" }}>Inversa Rx Optical</span>

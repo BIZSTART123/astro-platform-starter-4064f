@@ -17,7 +17,7 @@ cd "$(dirname "$0")/.."
 INBOX="clips-inbox"
 CLIPS="public/clips"
 READY="out/ready"
-mkdir -p "$INBOX" "$CLIPS" "$READY"
+mkdir -p "$INBOX/jutsu" "$CLIPS" "$READY"
 
 # --- 1+2: normalize whatever clips are in the inbox ---------------------------
 clips_json="["
@@ -47,6 +47,23 @@ render V2-ConcernedFriend "3-ConcernedFriend"
 render V3-EyeChart "4-EyeChart"
 render V4-TheBoys "5-TheBoys"
 
+# V6 Clear Vision Jutsu: clips in clips-inbox/jutsu/ named 1-*, 2-*, 3-*
+jutsu_json="["
+for n in 1 2 3; do
+  src="$(ls "$INBOX"/jutsu/"$n"-* 2>/dev/null | head -n 1 || true)"
+  if [ -n "$src" ]; then
+    ffmpeg -loglevel error -y -i "$src" -an \
+      -vf "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,fps=30" \
+      -c:v libx264 -pix_fmt yuv420p -crf 20 "$CLIPS/jutsu$n.mp4"
+    jutsu_json+="\"clips/jutsu$n.mp4\""
+  else
+    jutsu_json+="\"\""
+  fi
+  [ "$n" -lt 3 ] && jutsu_json+=","
+done
+jutsu_json+="]"
+render V6-Jutsu "6-ClearVisionJutsu" "{\"clips\":$jutsu_json}"
+
 cat > "$READY/CAPTIONS.txt" <<'TXT'
 SEND 7:00-8:30 AM, Tue-Thu. Broadcast lists of up to 256; send list 2 a couple of hours after list 1.
 
@@ -55,6 +72,7 @@ SEND 7:00-8:30 AM, Tue-Thu. Broadcast lists of up to 256; send list 2 a couple o
 3-ConcernedFriend     Hey stranger!! 😄 Real quick, watch this lol
 4-EyeChart            Ok be honest… 😂
 5-TheBoys (guys)      Yo… this you? 💀
+6-ClearVisionJutsu    Good morning ☀️ I had to try this trend 😂👓
 
 When they reply: "Lol good morning! Come by this week, I got you 👓"
 TXT
